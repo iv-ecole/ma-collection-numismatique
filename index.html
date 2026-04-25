@@ -370,8 +370,7 @@
     }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: .9rem; }
     .form-row.full { grid-template-columns: 1fr; }
-    .form-row.trio { grid-template-columns: 1fr 1fr 1fr; }
-    .field { display: flex; flex-direction: column; gap: .35rem; }
+    .form-row.trio { grid-template-columns: 1fr 1fr 1fr; }    .field { display: flex; flex-direction: column; gap: .35rem; }
     .field label { font-size: .72rem; letter-spacing: .08em; color: var(--text-muted); }
     .field input, .field select, .field textarea { padding: .6rem .9rem; width: 100%; }
     .field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
@@ -448,7 +447,7 @@
 <section class="hero" id="collection">
   <div>
     <h1 class="hero-title">Ma <em>Collection</em><br>Numismatique</h1>
-    <p class="hero-sub">Version 1.1</p>
+    <p class="hero-sub">Version 1.2</p>
   </div>
   <button class="btn btn-primary" onclick="openForm()">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -574,9 +573,10 @@
  
       <div class="form-section">
         <div class="form-section-title">Acquisition</div>
-        <div class="form-row">
+        <div class="form-row trio">
           <div class="field"><label>Prix d'achat (€)</label><input type="number" id="f-price" placeholder="ex. 59.90" step="0.01" /></div>
           <div class="field"><label>Date d'achat</label><input type="date" id="f-buydate" /></div>
+          <div class="field"><label>Quantité</label><input type="number" id="f-quantity" placeholder="1" min="1" value="1" /></div>
         </div>
         <div class="form-row">
           <div class="field"><label>Lieu / site d'achat</label><input type="text" id="f-seller" placeholder="ex. monnaiedeparis.fr" /></div>
@@ -721,12 +721,12 @@ function updateStats() {
   const fmt = (v, decimals = 2) =>
     v.toLocaleString('fr-FR', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
  
-  document.getElementById('stat-total').textContent  = coins.length;
+  document.getElementById('stat-total').textContent  = coins.reduce((s, c) => s + (parseInt(c.quantity) || 1), 0);
   const val    = coins.reduce((s, c) => s + (parseFloat(c.facevalue) || 0), 0);
   document.getElementById('stat-value').textContent  = fmt(val) + ' €';
-  const cost   = coins.reduce((s, c) => s + (parseFloat(c.price) || 0), 0);
+  const cost   = coins.reduce((s, c) => s + (parseFloat(c.price) || 0) * (parseInt(c.quantity) || 1), 0);
   document.getElementById('stat-cost').textContent   = fmt(cost) + ' €';
-  const weight = coins.reduce((s, c) => s + (parseFloat(c.weight) || 0), 0);
+  const weight = coins.reduce((s, c) => s + (parseFloat(c.weight) || 0) * (parseInt(c.quantity) || 1), 0);
   document.getElementById('stat-weight').textContent = fmt(weight, 1) + ' g';
 }
  
@@ -796,6 +796,7 @@ function renderCoins() {
           ${c.price     ? `<span><strong>Achat</strong> ${parseFloat(c.price).toLocaleString('fr-FR', {minimumFractionDigits:2})} €</span>` : ''}
           ${c.weight    ? `<span><strong>Poids</strong> ${c.weight} g</span>` : ''}
           ${c.mintage   ? `<span><strong>Tirage</strong> ${parseInt(c.mintage).toLocaleString('fr-FR')}</span>` : ''}
+          ${c.quantity && c.quantity > 1 ? `<span><strong>Quantité</strong> ×${c.quantity}</span>` : ''}
         </div>
       </div>
     </article>`).join('');
@@ -849,6 +850,7 @@ function openDetail(id) {
       ${field('Tirage',      c.mintage  ? parseInt(c.mintage).toLocaleString('fr-FR') + ' ex.' : '')}
       ${field('État',        c.condition)}
       ${field('Facture',     c.invoice)}
+      ${field('Quantité',    c.quantity ?? 1)}
       ${field("Prix d'achat", c.price   ? parseFloat(c.price).toLocaleString('fr-FR', {minimumFractionDigits:2}) + ' €' : '')}
       ${field("Date d'achat", c.buydate ? new Date(c.buydate).toLocaleDateString('fr-FR') : '')}
       ${field("Lieu d'achat", c.seller)}
@@ -914,7 +916,7 @@ function closeFormOverlay(e) {
 function clearForm() {
   ['f-title','f-year','f-facevalue','f-quality','f-condition','f-metal',
    'f-fineness','f-mintage','f-weight','f-diameter','f-price','f-buydate',
-   'f-seller','f-invoice','f-note'].forEach(id => {
+   'f-quantity','f-seller','f-invoice','f-note'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
@@ -939,6 +941,7 @@ function editCoin(id) {
     'f-quality': c.quality, 'f-condition': c.condition, 'f-metal': c.metal,
     'f-fineness': c.fineness, 'f-mintage': c.mintage, 'f-weight': c.weight,
     'f-diameter': c.diameter, 'f-price': c.price, 'f-buydate': c.buydate,
+    'f-quantity': c.quantity ?? 1,
     'f-seller': c.seller, 'f-invoice': c.invoice, 'f-note': c.note
   };
   Object.entries(map).forEach(([elId, val]) => {
@@ -1004,6 +1007,7 @@ async function saveForm() {
     diameter:  parseFloat(document.getElementById('f-diameter').value)|| null,
     price:     parseFloat(document.getElementById('f-price').value)   || null,
     buydate:   document.getElementById('f-buydate').value   || null,
+    quantity:  parseInt(document.getElementById('f-quantity').value)  || 1,
     seller:    document.getElementById('f-seller').value    || null,
     invoice:   document.getElementById('f-invoice').value   || null,
     note:      document.getElementById('f-note').value      || null,
