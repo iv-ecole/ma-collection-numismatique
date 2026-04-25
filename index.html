@@ -33,7 +33,7 @@
       min-height: 100vh;
       line-height: 1.6;
     }
- 
+
     /* ══ LOADING ══ */
     .loading-overlay {
       position: fixed; inset: 0; z-index: 2000;
@@ -50,7 +50,7 @@
       50%  { width: 60%; margin-left: 20%; }
       100% { width: 0%;  margin-left: 100%; }
     }
- 
+
     /* ══ TOAST ══ */
     #toast-container {
       position: fixed; bottom: 2rem; right: 2rem; z-index: 9999;
@@ -85,7 +85,7 @@
     .toast.leaving { animation: toastOut .25s ease forwards; }
     @keyframes toastIn  { from { opacity:0; transform:translateX(24px) scale(.97); } to { opacity:1; transform:translateX(0) scale(1); } }
     @keyframes toastOut { from { opacity:1; transform:translateX(0) scale(1); } to { opacity:0; transform:translateX(24px) scale(.97); } }
- 
+
     /* ══ AUTH SCREEN ══ */
     #authScreen {
       position: fixed; inset: 0; z-index: 1500;
@@ -121,7 +121,7 @@
     }
     .auth-submit:hover { background: var(--gold-light); }
     .auth-submit:disabled { opacity: .5; cursor: not-allowed; }
- 
+
     /* ══ TOPBAR ══ */
     .topbar {
       position: sticky; top: 0; z-index: 100;
@@ -144,7 +144,7 @@
       border: 1px solid var(--border); background: transparent; color: var(--text-muted);
     }
     .btn-top:hover { border-color: var(--gold); color: var(--gold); }
- 
+
     /* ══ HERO ══ */
     .hero {
       padding: 5rem 2.5rem 4rem;
@@ -155,7 +155,7 @@
     .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 5vw, 4.5rem); font-weight: 300; line-height: 1.05; letter-spacing: -.01em; }
     .hero-title em { font-style: italic; color: var(--gold); }
     .hero-sub { margin-top: 1rem; color: var(--text-muted); font-size: .9rem; letter-spacing: .04em; }
- 
+
     /* ══ STATS ══ */
     .stats-bar { display: flex; border-bottom: 1px solid var(--border); }
     .stat { flex: 1; padding: 1.8rem 2.5rem; border-right: 1px solid var(--border); transition: background .2s; }
@@ -163,7 +163,7 @@
     .stat:hover { background: var(--bg-elevated); }
     .stat-value { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 400; color: var(--gold); line-height: 1; }
     .stat-label { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); margin-top: .4rem; }
- 
+
     /* ══ TOOLBAR ══ */
     .toolbar { padding: 1.5rem 2.5rem; display: flex; gap: 1rem; align-items: center; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
     .search-wrap { flex: 1; min-width: 200px; position: relative; }
@@ -179,7 +179,7 @@
     input[type=search] { width: 100%; padding: .65rem 1rem .65rem 2.6rem; }
     select { padding: .65rem 1rem; cursor: pointer; }
     select option { background: var(--bg-elevated); }
- 
+
     /* ══ BUTTONS ══ */
     .btn { padding: .65rem 1.4rem; font-family: 'DM Sans', sans-serif; font-size: .78rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; border: none; border-radius: var(--radius); cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: .5rem; }
     .btn-primary { background: var(--gold); color: #000; }
@@ -188,14 +188,14 @@
     .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
     .btn-danger { background: transparent; color: var(--red); border: 1px solid rgba(192,57,43,.3); }
     .btn-danger:hover { background: rgba(192,57,43,.07); border-color: var(--red); }
- 
+
     /* ══ GRID ══ */
     .grid-area { padding: 2.5rem; }
     .coins-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5px; }
     .empty-state { grid-column: 1/-1; text-align: center; padding: 6rem 2rem; color: var(--text-muted); }
     .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; opacity: .3; }
     .empty-state p { font-size: .9rem; margin-bottom: 1.5rem; }
- 
+
     /* ══ CARD ══ */
     .card { background: var(--bg-card); border: 1px solid var(--border); overflow: hidden; cursor: pointer; transition: transform .25s, border-color .25s, box-shadow .25s; position: relative; }
     .card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(201,168,76,.04) 0%, transparent 60%); opacity: 0; transition: opacity .25s; }
@@ -214,7 +214,18 @@
     .card-specs { display: grid; grid-template-columns: 1fr 1fr; gap: .3rem .8rem; font-size: .75rem; color: var(--text-muted); }
     .card-specs span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .card-specs strong { color: var(--text-mid); font-weight: 400; }
- 
+    .card-selling { margin-top: .7rem; padding-top: .6rem; border-top: 1px solid var(--border); }
+    .selling-tag {
+      font-size: .72rem; font-weight: 500; letter-spacing: .06em;
+      color: var(--gold); background: rgba(201,168,76,.1);
+      border: 1px solid rgba(201,168,76,.25); border-radius: 3px;
+      padding: .2rem .6rem; display: inline-block;
+    }
+    .not-for-sale {
+      font-size: .68rem; letter-spacing: .06em; text-transform: uppercase;
+      color: var(--text-muted); opacity: .5;
+    }
+
     /* ══ MODAL ══ */
     .overlay { position: fixed; inset: 0; z-index: 500; background: rgba(0,0,0,.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 1.5rem; opacity: 0; pointer-events: none; transition: opacity .3s; }
     .overlay.open { opacity: 1; pointer-events: all; }
@@ -232,7 +243,7 @@
     .detail-field { background: var(--bg-card); padding: .9rem 1.2rem; }
     .detail-field label { font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: .2rem; }
     .detail-field span { font-size: .9rem; color: var(--text); }
- 
+
     /* ══ FORM ══ */
     .form-overlay { z-index: 600; }
     .form-modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; width: 100%; max-width: 700px; max-height: 92vh; overflow-y: auto; transform: translateY(20px); transition: transform .3s; }
@@ -257,7 +268,7 @@
     .img-upload p { font-size: .72rem; color: var(--text-muted); }
     .img-upload img { max-height: 100px; object-fit: contain; border-radius: 2px; }
     .form-actions { display: flex; gap: 1rem; justify-content: flex-end; padding-top: 1rem; border-top: 1px solid var(--border); }
- 
+
     /* ══ ADMIN PANEL ══ */
     .admin-overlay { z-index: 700; }
     .admin-modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; width: 100%; max-width: 560px; max-height: 85vh; overflow-y: auto; transform: translateY(20px); transition: transform .3s; }
@@ -272,38 +283,74 @@
     .user-row-date { font-size: .72rem; color: var(--text-muted); }
     .role-select { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: .72rem; border-radius: var(--radius); outline: none; padding: .28rem .6rem; cursor: pointer; transition: border-color .2s; }
     .role-select:focus { border-color: var(--gold); }
- 
+
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
- 
-    @media (max-width: 600px) {
-      .topbar { padding: 0 1rem; }
+
+    @media (max-width: 640px) {
+      /* Topbar */
+      .topbar { padding: 0 1rem; height: 50px; }
+      .topbar-logo { font-size: 1.1rem; }
       .user-chip-name { display: none; }
-      .hero { padding: 3rem 1rem 2rem; grid-template-columns: 1fr; }
-      .stat { padding: 1.2rem 1rem; }
-      .stat-value { font-size: 1.6rem; }
-      .toolbar { padding: 1rem; }
-      .grid-area { padding: 1.5rem 1rem; }
+      .btn-top { padding: .28rem .55rem; font-size: .65rem; }
+      .topbar-right { gap: .45rem; }
+      /* Hero */
+      .hero { padding: 2.2rem 1.2rem 1.8rem; grid-template-columns: 1fr; gap: 1.2rem; background: none; }
+      .hero-title { font-size: 2.2rem; }
+      .hero-sub { font-size: .8rem; margin-top: .4rem; }
+      #addBtn { width: 100%; justify-content: center; }
+      /* Stats 2x2 */
+      .stats-bar { flex-wrap: wrap; }
+      .stat { flex: 1 1 calc(50% - 1px); padding: 1rem 1.2rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); min-width: 0; }
+      .stat:nth-child(2) { border-right: none; }
+      .stat:nth-child(3) { border-bottom: none; }
+      .stat:nth-child(4) { border-right: none; border-bottom: none; }
+      .stat-value { font-size: 1.5rem; }
+      .stat-label { font-size: .62rem; }
+      /* Toolbar colonne */
+      .toolbar { padding: .9rem 1rem; flex-direction: column; align-items: stretch; gap: .6rem; }
+      .search-wrap { min-width: 0; }
+      .toolbar select { width: 100%; }
+      /* Grid 1 col */
+      .grid-area { padding: 1rem; }
+      .coins-grid { grid-template-columns: 1fr; gap: 1px; }
+      /* Form */
+      .form-body { padding: 1.2rem 1rem 1.5rem; }
+      .form-header { padding: 1.2rem 1rem .9rem; }
       .form-row { grid-template-columns: 1fr; }
       .form-row.trio { grid-template-columns: 1fr 1fr; }
-      .detail-grid { grid-template-columns: 1fr; }
-      #toast-container { right: 1rem; bottom: 1rem; left: 1rem; }
-      .toast { max-width: 100%; }
+      .form-actions { flex-direction: column-reverse; }
+      .form-actions .btn { width: 100%; justify-content: center; }
+      .img-upload-row { grid-template-columns: 1fr 1fr; }
+      /* Detail modal bottom sheet */
+      .modal { border-radius: 12px 12px 0 0; max-height: 95vh; }
+      .overlay { padding: 0; align-items: flex-end; }
+      .detail-grid { grid-template-columns: 1fr; margin: 0 1rem 1.5rem; }
+      .modal-header { padding: 1.3rem 1.2rem 0; }
+      .detail-imgs { padding: 1.2rem; gap: .8rem; }
+      .detail-imgs > div > img { max-height: 120px; }
+      /* Admin */
+      .admin-modal { border-radius: 12px 12px 0 0; max-height: 95vh; }
+      .user-row { padding: .85rem 1.2rem; flex-wrap: wrap; gap: .5rem; }
+      .user-row-date { width: 100%; order: 3; }
+      /* Toast */
+      #toast-container { right: .8rem; bottom: .8rem; left: .8rem; }
+      .toast { min-width: 0; max-width: 100%; }
     }
   </style>
 </head>
 <body>
- 
+
 <!-- LOADING -->
 <div class="loading-overlay" id="loadingOverlay">
   <div class="loading-logo">Numisma</div>
   <div class="loading-bar"><div class="loading-bar-inner"></div></div>
 </div>
- 
+
 <!-- TOAST -->
 <div id="toast-container"></div>
- 
+
 <!-- ══════════════ AUTH ══════════════ -->
 <div id="authScreen">
   <div class="auth-box">
@@ -313,12 +360,12 @@
       <button class="auth-tab active" onclick="switchTab('login')">Connexion</button>
       <button class="auth-tab"        onclick="switchTab('register')">Créer un compte</button>
     </div>
- 
+
     <!-- LOGIN -->
     <div id="tab-login">
       <div class="auth-field">
         <label>Nom d'utilisateur</label>
-        <input type="text" id="l-user" placeholder="Votre nom d'utilisateur" autocomplete="username"
+        <input type="text" id="l-user" placeholder="votre pseudo" autocomplete="username"
           onkeydown="if(event.key==='Enter')doLogin()" />
       </div>
       <div class="auth-field">
@@ -328,16 +375,16 @@
       </div>
       <button class="auth-submit" id="loginBtn" onclick="doLogin()">Se connecter</button>
     </div>
- 
+
     <!-- REGISTER -->
     <div id="tab-register" style="display:none">
       <div class="auth-field">
         <label>Nom d'utilisateur</label>
-        <input type="text" id="r-user" placeholder="Choisissez un nom d'utilisateur" autocomplete="username" />
+        <input type="text" id="r-user" placeholder="choisissez un pseudo" autocomplete="username" />
       </div>
       <div class="auth-field">
         <label>Mot de passe</label>
-        <input type="password" id="r-pass" placeholder="Min. 6 caractères" autocomplete="new-password" />
+        <input type="password" id="r-pass" placeholder="min. 6 caractères" autocomplete="new-password" />
       </div>
       <div class="auth-field">
         <label>Confirmer le mot de passe</label>
@@ -348,10 +395,10 @@
     </div>
   </div>
 </div>
- 
+
 <!-- ══════════════ APP ══════════════ -->
 <div id="app" style="display:none">
- 
+
   <!-- TOPBAR -->
   <div class="topbar">
     <span class="topbar-logo">Numisma</span>
@@ -364,19 +411,19 @@
       <button class="btn-top" onclick="doLogout()">Déconnexion</button>
     </div>
   </div>
- 
+
   <!-- HERO -->
   <section class="hero">
     <div>
       <h1 class="hero-title">Ma <em>Collection</em><br>Numismatique</h1>
-      <p class="hero-sub">Version 2.0</p>
+      <p class="hero-sub">Monnaie de Paris · Pièces modernes de collection</p>
     </div>
     <button class="btn btn-primary" id="addBtn" style="display:none" onclick="openForm()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       Ajouter une pièce
     </button>
   </section>
- 
+
   <!-- STATS -->
   <section class="stats-bar">
     <div class="stat"><div class="stat-value" id="stat-total">—</div><div class="stat-label">Pièces</div></div>
@@ -384,7 +431,7 @@
     <div class="stat"><div class="stat-value" id="stat-cost">— €</div><div class="stat-label">Prix d'achat total</div></div>
     <div class="stat"><div class="stat-value" id="stat-weight">— g</div><div class="stat-label">Poids total</div></div>
   </section>
- 
+
   <!-- TOOLBAR -->
   <div class="toolbar">
     <div class="search-wrap">
@@ -414,18 +461,18 @@
       <option value="price_asc">Prix ↑</option>
     </select>
   </div>
- 
+
   <!-- GRID -->
   <main class="grid-area">
     <div class="coins-grid" id="coinsGrid"></div>
   </main>
 </div>
- 
+
 <!-- DETAIL MODAL -->
 <div class="overlay" id="detailOverlay" onclick="closeDetail(event)">
   <div class="modal" id="detailModal"></div>
 </div>
- 
+
 <!-- FORM MODAL -->
 <div class="overlay form-overlay" id="formOverlay" onclick="closeFormOverlay(event)">
   <div class="form-modal">
@@ -480,6 +527,15 @@
         <div class="form-row full"><div class="field"><label>Anecdote / description</label><textarea id="f-note" placeholder="Notes, contexte historique…"></textarea></div></div>
       </div>
       <div class="form-section">
+        <div class="form-section-title">Prix de vente</div>
+        <div class="form-row full">
+          <div class="field">
+            <label>Prix de vente (€) — laisser vide si pas en vente</label>
+            <input type="number" id="f-selling" placeholder="ex. 85.00 — vide = PAS EN VENTE" step="0.01" />
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
         <div class="form-section-title">Photos</div>
         <div class="img-upload-row">
           <div class="img-upload" onclick="document.getElementById('f-img-avers').click()">
@@ -503,7 +559,7 @@
     </div>
   </div>
 </div>
- 
+
 <!-- ADMIN MODAL -->
 <div class="overlay admin-overlay" id="adminOverlay" onclick="closeAdminOverlay(event)">
   <div class="admin-modal">
@@ -516,7 +572,7 @@
     </div>
   </div>
 </div>
- 
+
 <script>
 // ══════════════════════════════════════════════
 //  CONFIG
@@ -527,7 +583,7 @@ const TABLE         = 'coins';
 const USERS_TABLE   = 'users';
 const ADMIN_NAME    = 'ivafan';      // compte qui devient automatiquement admin
 const SESSION_KEY   = 'numisma_v1'; // clé localStorage
- 
+
 // ══════════════════════════════════════════════
 //  SUPABASE HELPER
 // ══════════════════════════════════════════════
@@ -546,7 +602,7 @@ async function sb(path, opts = {}) {
   if (res.status === 204) return null;
   return res.json();
 }
- 
+
 // ══════════════════════════════════════════════
 //  HASH (SHA-256)
 // ══════════════════════════════════════════════
@@ -554,7 +610,7 @@ async function hash(str) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
 }
- 
+
 // ══════════════════════════════════════════════
 //  TOAST
 // ══════════════════════════════════════════════
@@ -580,7 +636,7 @@ function showToast({ type = 'success', title, message, confirm = false }) {
     else { el.querySelector('.toast-close').onclick = () => dismiss(null); setTimeout(() => { if(el.isConnected) dismiss(null); }, 3500); }
   });
 }
- 
+
 // ══════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════
@@ -588,7 +644,7 @@ let currentUser = null;
 let coins       = [];
 let editingId   = null;
 const isAdmin   = () => currentUser?.role === 'admin';
- 
+
 // ══════════════════════════════════════════════
 //  AUTH — onglets
 // ══════════════════════════════════════════════
@@ -597,7 +653,7 @@ function switchTab(t) {
   document.getElementById('tab-register').style.display = t==='register' ? '' : 'none';
   document.querySelectorAll('.auth-tab').forEach((b,i) => b.classList.toggle('active', i===(t==='login'?0:1)));
 }
- 
+
 // ══════════════════════════════════════════════
 //  REGISTER
 // ══════════════════════════════════════════════
@@ -605,23 +661,23 @@ async function doRegister() {
   const username = document.getElementById('r-user').value.trim().toLowerCase();
   const pass     = document.getElementById('r-pass').value;
   const pass2    = document.getElementById('r-pass2').value;
- 
+
   if (!username)        { showToast({type:'error',title:'Champ requis',message:'Entrez un nom d\'utilisateur.'}); return; }
   if (pass.length < 6)  { showToast({type:'error',title:'Mot de passe trop court',message:'Minimum 6 caractères.'}); return; }
   if (pass !== pass2)   { showToast({type:'error',title:'Mots de passe différents',message:'Les deux saisies ne correspondent pas.'}); return; }
- 
+
   const btn = document.getElementById('registerBtn');
   btn.disabled = true; btn.textContent = 'Création…';
- 
+
   try {
     // Vérifier si le username est déjà pris
     const existing = await sb(`${USERS_TABLE}?username=eq.${encodeURIComponent(username)}&select=id`);
     if (existing?.length) { showToast({type:'error',title:'Nom déjà pris',message:'Ce pseudo est déjà utilisé.'}); return; }
- 
+
     const hashed = await hash(pass);
     const role   = username === ADMIN_NAME ? 'admin' : 'visiteur';
     const rows   = await sb(USERS_TABLE, { method:'POST', prefer:'return=representation', body: JSON.stringify({ username, password: hashed, role }) });
- 
+
     startSession(rows[0]);
     showToast({type:'success', title:`Bienvenue, ${rows[0].username} !`, message:`Compte créé — rôle : ${rows[0].role}.`});
   } catch(e) {
@@ -630,25 +686,25 @@ async function doRegister() {
     btn.disabled = false; btn.textContent = 'Créer mon compte';
   }
 }
- 
+
 // ══════════════════════════════════════════════
 //  LOGIN
 // ══════════════════════════════════════════════
 async function doLogin() {
   const username = document.getElementById('l-user').value.trim().toLowerCase();
   const pass     = document.getElementById('l-pass').value;
- 
+
   if (!username || !pass) { showToast({type:'error',title:'Champs requis',message:'Remplissez tous les champs.'}); return; }
- 
+
   const btn = document.getElementById('loginBtn');
   btn.disabled = true; btn.textContent = 'Connexion…';
- 
+
   try {
     const hashed = await hash(pass);
     const rows   = await sb(`${USERS_TABLE}?username=eq.${encodeURIComponent(username)}&password=eq.${encodeURIComponent(hashed)}&select=*`);
- 
+
     if (!rows?.length) { showToast({type:'error',title:'Identifiants incorrects',message:'Nom d\'utilisateur ou mot de passe invalide.'}); return; }
- 
+
     startSession(rows[0]);
     showToast({type:'success', title:`Bienvenue, ${rows[0].username} !`, message: rows[0].role==='admin' ? 'Connecté en tant qu\'administrateur.' : 'Connecté en mode visiteur.'});
   } catch(e) {
@@ -657,7 +713,7 @@ async function doLogin() {
     btn.disabled = false; btn.textContent = 'Se connecter';
   }
 }
- 
+
 // ══════════════════════════════════════════════
 //  SESSION
 // ══════════════════════════════════════════════
@@ -666,7 +722,7 @@ function startSession(user) {
   localStorage.setItem(SESSION_KEY, JSON.stringify(user));
   showApp();
 }
- 
+
 function doLogout() {
   localStorage.removeItem(SESSION_KEY);
   currentUser = null; coins = [];
@@ -676,25 +732,25 @@ function doLogout() {
   document.getElementById('l-pass').value = '';
   switchTab('login');
 }
- 
+
 // ══════════════════════════════════════════════
 //  SHOW APP
 // ══════════════════════════════════════════════
 function showApp() {
   document.getElementById('authScreen').classList.remove('show');
   document.getElementById('app').style.display = 'block';
- 
+
   document.getElementById('tbUser').textContent = currentUser.username;
   const pill = document.getElementById('tbRole');
   pill.textContent = currentUser.role;
   pill.className   = `role-pill ${currentUser.role}`;
- 
+
   document.getElementById('adminBtn').style.display = isAdmin() ? '' : 'none';
   document.getElementById('addBtn').style.display   = isAdmin() ? '' : 'none';
- 
+
   loadCoins();
 }
- 
+
 // ══════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════
@@ -722,12 +778,12 @@ async function init() {
   } else {
     document.getElementById('authScreen').classList.add('show');
   }
- 
+
   const lo = document.getElementById('loadingOverlay');
   lo.style.opacity = '0';
   setTimeout(() => lo.remove(), 400);
 }
- 
+
 // ══════════════════════════════════════════════
 //  LOAD COINS
 // ══════════════════════════════════════════════
@@ -740,7 +796,7 @@ async function loadCoins() {
   }
   renderCoins();
 }
- 
+
 // ══════════════════════════════════════════════
 //  STATS
 // ══════════════════════════════════════════════
@@ -752,14 +808,14 @@ function updateStats() {
   document.getElementById('stat-cost').textContent   = fmt(coins.reduce((s,c) => s + (parseFloat(c.price)||0)     * qty(c), 0)) + ' €';
   document.getElementById('stat-weight').textContent = fmt(coins.reduce((s,c) => s + (parseFloat(c.weight)||0)    * qty(c), 0), 1) + ' g';
 }
- 
+
 function metalClass(m) {
   if (m==='Argent')       return 'metal-ag';
   if (m==='Or')           return 'metal-au';
   if (m==='Métal commun') return 'metal-cu';
   return '';
 }
- 
+
 // ══════════════════════════════════════════════
 //  RENDER GRID
 // ══════════════════════════════════════════════
@@ -768,7 +824,7 @@ function renderCoins() {
   const fMetal = document.getElementById('filterMetal').value;
   const fQual  = document.getElementById('filterQuality').value;
   const sort   = document.getElementById('sortBy').value;
- 
+
   let list = coins.filter(c => {
     if (q && !JSON.stringify(c).toLowerCase().includes(q)) return false;
     if (fMetal && c.metal   !== fMetal) return false;
@@ -784,7 +840,7 @@ function renderCoins() {
     if (sort==='price_asc')  return (parseFloat(a.price)||0) - (parseFloat(b.price)||0);
     return 0;
   });
- 
+
   const grid = document.getElementById('coinsGrid');
   if (!list.length) {
     grid.innerHTML = `<div class="empty-state"><div class="icon">🪙</div>
@@ -793,7 +849,7 @@ function renderCoins() {
     </div>`;
     updateStats(); return;
   }
- 
+
   grid.innerHTML = list.map(c => `
     <article class="card" onclick="openDetail('${c.id}')">
       <div class="card-imgs">
@@ -809,15 +865,18 @@ function renderCoins() {
         </div>
         <div class="card-specs">
           ${c.facevalue                  ? `<span><strong>Faciale</strong> ${parseFloat(c.facevalue).toLocaleString('fr-FR')} €</span>` : ''}
-          ${isAdmin() && c.price         ? `<span><strong>Achat</strong> ${parseFloat(c.price).toLocaleString('fr-FR',{minimumFractionDigits:2})} €</span>` : ''}
+          ${c.price                      ? `<span><strong>Achat</strong> ${parseFloat(c.price).toLocaleString('fr-FR',{minimumFractionDigits:2})} €</span>` : ''}
           ${c.weight                     ? `<span><strong>Poids</strong> ${c.weight} g</span>`   : ''}
           ${c.quantity && c.quantity > 1 ? `<span><strong>Quantité</strong> ×${c.quantity}</span>` : ''}
+        </div>
+        <div class="card-selling">
+          ${c.selling_price ? `<span class="selling-tag">🏷 ${parseFloat(c.selling_price).toLocaleString('fr-FR',{minimumFractionDigits:2})} €</span>` : `<span class="not-for-sale">Pas en vente</span>`}
         </div>
       </div>
     </article>`).join('');
   updateStats();
 }
- 
+
 // ══════════════════════════════════════════════
 //  DETAIL
 // ══════════════════════════════════════════════
@@ -825,7 +884,7 @@ function openDetail(id) {
   const c = coins.find(x => x.id === id); if (!c) return;
   const f = (label, val) => (!val && val!==0) ? '' :
     `<div class="detail-field"><label>${label}</label><span>${val}</span></div>`;
- 
+
   document.getElementById('detailModal').innerHTML = `
     <div class="modal-header">
       <div>
@@ -860,10 +919,11 @@ function openDetail(id) {
       ${f('Tirage',         c.mintage   ? parseInt(c.mintage).toLocaleString('fr-FR')+' ex.' : '')}
       ${f('Quantité',       c.quantity ?? 1)}
       ${f('État',           c.condition)}
-      ${f('Facture',        isAdmin() ? c.invoice : '')}
-      ${f("Prix d'achat",   isAdmin() && c.price   ? parseFloat(c.price).toLocaleString('fr-FR',{minimumFractionDigits:2})+' €' : '')}
-      ${f("Date d'achat",   isAdmin() && c.buydate ? new Date(c.buydate).toLocaleDateString('fr-FR') : '')}
-      ${f("Lieu d'achat",   isAdmin() ? c.seller : '')}
+      ${f('Facture',        c.invoice)}
+      ${f("Prix d'achat",   c.price   ? parseFloat(c.price).toLocaleString('fr-FR',{minimumFractionDigits:2})+' €' : '')}
+      ${f("Date d'achat",   c.buydate ? new Date(c.buydate).toLocaleDateString('fr-FR') : '')}
+      ${f("Lieu d'achat",   c.seller)}
+      ${f("Prix de vente",  c.selling_price ? parseFloat(c.selling_price).toLocaleString('fr-FR',{minimumFractionDigits:2})+' €' : 'Pas en vente')}
     </div>
     ${c.note ? `<div style="padding:0 2rem 1.5rem;color:var(--text-muted);font-size:.85rem;font-style:italic;line-height:1.7">"${c.note}"</div>` : ''}
     ${isAdmin() ? `
@@ -873,12 +933,12 @@ function openDetail(id) {
     </div>` : ''}`;
   document.getElementById('detailOverlay').classList.add('open');
 }
- 
+
 function closeDetail(e) {
   if (e && e.target !== document.getElementById('detailOverlay')) return;
   document.getElementById('detailOverlay').classList.remove('open');
 }
- 
+
 // ══════════════════════════════════════════════
 //  DELETE
 // ══════════════════════════════════════════════
@@ -896,7 +956,7 @@ async function deleteConfirm(id) {
     showToast({type:'error', title:'Erreur', message: e.message});
   }
 }
- 
+
 // ══════════════════════════════════════════════
 //  FORM
 // ══════════════════════════════════════════════
@@ -910,17 +970,17 @@ function openForm() {
 }
 function closeForm() { document.getElementById('formOverlay').classList.remove('open'); }
 function closeFormOverlay(e) { if (e.target===document.getElementById('formOverlay')) closeForm(); }
- 
+
 function clearForm() {
   ['f-title','f-year','f-facevalue','f-quality','f-condition','f-metal',
    'f-fineness','f-mintage','f-weight','f-diameter','f-price','f-buydate',
-   'f-quantity','f-seller','f-invoice','f-note'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+   'f-quantity','f-seller','f-invoice','f-note','f-selling'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('f-quantity').value = '1';
   ['prev-avers','prev-revers'].forEach(id => { const i=document.getElementById(id); i.src=''; i.style.display='none'; });
   document.getElementById('f-img-avers').value = '';
   document.getElementById('f-img-revers').value = '';
 }
- 
+
 function editCoin(id) {
   const c = coins.find(x => x.id === id); if (!c) return;
   editingId = id;
@@ -931,39 +991,39 @@ function editCoin(id) {
     'f-title':c.title,'f-year':c.year,'f-facevalue':c.facevalue,'f-quality':c.quality,
     'f-condition':c.condition,'f-metal':c.metal,'f-fineness':c.fineness,'f-mintage':c.mintage,
     'f-weight':c.weight,'f-diameter':c.diameter,'f-price':c.price,'f-buydate':c.buydate,
-    'f-quantity':c.quantity??1,'f-seller':c.seller,'f-invoice':c.invoice,'f-note':c.note
+    'f-quantity':c.quantity??1,'f-seller':c.seller,'f-invoice':c.invoice,'f-note':c.note,'f-selling':c.selling_price
   };
   Object.entries(map).forEach(([k,v]) => { const el=document.getElementById(k); if(el&&v!=null) el.value=v; });
   if (c.img_avers)  { const i=document.getElementById('prev-avers');  i.src=c.img_avers;  i.style.display='block'; }
   if (c.img_revers) { const i=document.getElementById('prev-revers'); i.src=c.img_revers; i.style.display='block'; }
   document.getElementById('formOverlay').classList.add('open');
 }
- 
+
 function previewImg(input, pid) {
   const f = input.files[0]; if (!f) return;
   const r = new FileReader();
   r.onload = e => { const i=document.getElementById(pid); i.src=e.target.result; i.style.display='block'; };
   r.readAsDataURL(f);
 }
- 
+
 async function readImg(inputId, existing) {
   const input = document.getElementById(inputId);
   if (input.files?.[0]) return new Promise(res => { const r=new FileReader(); r.onload=e=>res(e.target.result); r.readAsDataURL(input.files[0]); });
   return existing || null;
 }
- 
+
 async function saveForm() {
   if (!isAdmin()) return;
   const title = document.getElementById('f-title').value.trim();
   if (!title) { showToast({type:'error',title:'Champ obligatoire',message:'Le titre est requis.'}); return; }
- 
+
   const btn = document.getElementById('saveBtn');
   btn.disabled = true; btn.textContent = 'Enregistrement…';
- 
+
   const ex = editingId ? coins.find(x => x.id===editingId) : null;
   const img_avers  = await readImg('f-img-avers',  ex?.img_avers);
   const img_revers = await readImg('f-img-revers', ex?.img_revers);
- 
+
   const payload = {
     title,
     year:      parseInt(document.getElementById('f-year').value)        || null,
@@ -981,9 +1041,10 @@ async function saveForm() {
     seller:    document.getElementById('f-seller').value    || null,
     invoice:   document.getElementById('f-invoice').value   || null,
     note:      document.getElementById('f-note').value      || null,
-    img_avers, img_revers
+    img_avers, img_revers,
+    selling_price: parseFloat(document.getElementById('f-selling').value) || null
   };
- 
+
   try {
     if (editingId) {
       const res = await sb(`${TABLE}?id=eq.${editingId}`, {method:'PATCH', prefer:'return=representation', body:JSON.stringify(payload)});
@@ -1003,7 +1064,7 @@ async function saveForm() {
     btn.textContent = editingId ? 'Mettre à jour' : 'Enregistrer la pièce';
   }
 }
- 
+
 // ══════════════════════════════════════════════
 //  ADMIN — gestion utilisateurs
 // ══════════════════════════════════════════════
@@ -1014,7 +1075,7 @@ async function openAdmin() {
 }
 function closeAdmin() { document.getElementById('adminOverlay').classList.remove('open'); }
 function closeAdminOverlay(e) { if (e.target===document.getElementById('adminOverlay')) closeAdmin(); }
- 
+
 async function loadUsers() {
   const ul = document.getElementById('userList');
   ul.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--text-muted);font-size:.85rem">Chargement…</div>';
@@ -1036,7 +1097,7 @@ async function loadUsers() {
     ul.innerHTML = `<div style="padding:2rem;color:var(--red);font-size:.82rem">${e.message}</div>`;
   }
 }
- 
+
 async function changeRole(userId, newRole) {
   try {
     await sb(`${USERS_TABLE}?id=eq.${userId}`, {method:'PATCH', body:JSON.stringify({role: newRole})});
@@ -1046,7 +1107,7 @@ async function changeRole(userId, newRole) {
     await loadUsers(); // re-sync
   }
 }
- 
+
 // ══════════════════════════════════════════════
 //  START
 // ══════════════════════════════════════════════
