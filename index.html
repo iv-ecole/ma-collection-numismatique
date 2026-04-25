@@ -21,6 +21,7 @@
       --text-mid: #B0AA9E;
       --radius: 4px;
       --shadow: 0 8px 40px rgba(0,0,0,0.6);
+      --red: #C0392B;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -33,393 +34,252 @@
       line-height: 1.6;
     }
  
-    /* ── TOAST ── */
+    /* ══ LOADING ══ */
+    .loading-overlay {
+      position: fixed; inset: 0; z-index: 2000;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 1rem;
+      transition: opacity .4s;
+    }
+    .loading-logo { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--gold); letter-spacing: .15em; font-weight: 300; }
+    .loading-bar { width: 120px; height: 1px; background: var(--border); overflow: hidden; }
+    .loading-bar-inner { height: 100%; background: var(--gold); animation: loadbar 1.2s ease-in-out infinite; }
+    @keyframes loadbar {
+      0%   { width: 0%;  margin-left: 0; }
+      50%  { width: 60%; margin-left: 20%; }
+      100% { width: 0%;  margin-left: 100%; }
+    }
+ 
+    /* ══ TOAST ══ */
     #toast-container {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: .6rem;
-      pointer-events: none;
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 9999;
+      display: flex; flex-direction: column; gap: .6rem; pointer-events: none;
     }
     .toast {
       pointer-events: all;
-      display: flex;
-      align-items: flex-start;
-      gap: .85rem;
+      display: flex; align-items: flex-start; gap: .85rem;
       padding: .95rem 1.2rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      box-shadow: 0 12px 40px rgba(0,0,0,.7), 0 0 0 1px rgba(201,168,76,.06);
-      min-width: 260px;
-      max-width: 360px;
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.7);
+      min-width: 260px; max-width: 360px;
       animation: toastIn .3s cubic-bezier(.16,1,.3,1) forwards;
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
     }
-    .toast::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 3px;
-    }
+    .toast::before { content: ''; position: absolute; left:0; top:0; bottom:0; width:3px; }
     .toast.toast-success::before { background: var(--gold); }
-    .toast.toast-error::before   { background: #C0392B; }
-    .toast.toast-confirm::before { background: #7A6230; }
-    .toast-icon {
-      font-size: 1rem;
-      flex-shrink: 0;
-      margin-top: .1rem;
-    }
+    .toast.toast-error::before   { background: var(--red); }
+    .toast.toast-confirm::before { background: var(--gold-dim); }
+    .toast-icon { font-size: 1rem; flex-shrink: 0; margin-top: .1rem; }
     .toast-body { flex: 1; }
-    .toast-title {
-      font-size: .8rem;
-      font-weight: 500;
-      letter-spacing: .04em;
-      color: var(--text);
-      margin-bottom: .1rem;
-    }
-    .toast-msg {
-      font-size: .75rem;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-    .toast-actions {
-      display: flex;
-      gap: .5rem;
-      margin-top: .65rem;
-    }
-    .toast-btn {
-      padding: .3rem .75rem;
-      border-radius: 3px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: .72rem;
-      font-weight: 500;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      cursor: pointer;
-      border: none;
-      transition: all .15s;
-    }
-    .toast-btn-confirm {
-      background: var(--gold);
-      color: #000;
-    }
-    .toast-btn-confirm:hover { background: var(--gold-light); }
-    .toast-btn-cancel {
-      background: transparent;
-      color: var(--text-muted);
-      border: 1px solid var(--border);
-    }
+    .toast-title { font-size: .8rem; font-weight: 500; letter-spacing: .04em; color: var(--text); margin-bottom: .1rem; }
+    .toast-msg   { font-size: .75rem; color: var(--text-muted); line-height: 1.4; }
+    .toast-actions { display: flex; gap: .5rem; margin-top: .65rem; }
+    .toast-btn { padding: .3rem .75rem; border-radius: 3px; font-family: 'DM Sans', sans-serif; font-size: .72rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; border: none; transition: all .15s; }
+    .toast-btn-confirm { background: var(--red); color: #fff; }
+    .toast-btn-confirm:hover { background: #a93226; }
+    .toast-btn-cancel  { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
     .toast-btn-cancel:hover { border-color: var(--gold); color: var(--gold); }
-    .toast-close {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: .9rem;
-      padding: 0;
-      line-height: 1;
-      flex-shrink: 0;
-      transition: color .15s;
-    }
+    .toast-close { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: .9rem; padding: 0; line-height: 1; flex-shrink: 0; transition: color .15s; }
     .toast-close:hover { color: var(--gold); }
-    .toast.leaving {
-      animation: toastOut .25s ease forwards;
-    }
-    @keyframes toastIn {
-      from { opacity: 0; transform: translateX(24px) scale(.97); }
-      to   { opacity: 1; transform: translateX(0) scale(1); }
-    }
-    @keyframes toastOut {
-      from { opacity: 1; transform: translateX(0) scale(1); }
-      to   { opacity: 0; transform: translateX(24px) scale(.97); }
-    }
+    .toast.leaving { animation: toastOut .25s ease forwards; }
+    @keyframes toastIn  { from { opacity:0; transform:translateX(24px) scale(.97); } to { opacity:1; transform:translateX(0) scale(1); } }
+    @keyframes toastOut { from { opacity:1; transform:translateX(0) scale(1); } to { opacity:0; transform:translateX(24px) scale(.97); } }
  
-    /* ── HERO ── */
+    /* ══ AUTH SCREEN ══ */
+    #authScreen {
+      position: fixed; inset: 0; z-index: 1500;
+      background: var(--bg);
+      display: none; align-items: center; justify-content: center;
+      background-image: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,.06) 0%, transparent 70%);
+    }
+    #authScreen.show { display: flex; }
+    .auth-box {
+      width: 100%; max-width: 380px;
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+      padding: 2.5rem;
+    }
+    .auth-logo { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 300; color: var(--gold); text-align: center; letter-spacing: .12em; margin-bottom: .2rem; }
+    .auth-tagline { text-align: center; color: var(--text-muted); font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 2rem; }
+    .auth-tabs { display: flex; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1.8rem; }
+    .auth-tab { flex: 1; padding: .6rem; background: transparent; border: none; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; transition: all .2s; }
+    .auth-tab.active { background: var(--gold); color: #000; font-weight: 500; }
+    .auth-field { display: flex; flex-direction: column; gap: .35rem; margin-bottom: 1rem; }
+    .auth-field label { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
+    .auth-field input {
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      color: var(--text); font-family: 'DM Sans', sans-serif;
+      font-size: .9rem; font-weight: 300; border-radius: var(--radius);
+      outline: none; transition: border-color .2s; padding: .7rem .9rem; width: 100%;
+    }
+    .auth-field input:focus { border-color: var(--gold); }
+    .auth-submit {
+      width: 100%; padding: .75rem; background: var(--gold); color: #000;
+      border: none; border-radius: var(--radius); cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: .8rem; font-weight: 500;
+      letter-spacing: .1em; text-transform: uppercase; transition: all .2s; margin-top: .4rem;
+    }
+    .auth-submit:hover { background: var(--gold-light); }
+    .auth-submit:disabled { opacity: .5; cursor: not-allowed; }
+ 
+    /* ══ TOPBAR ══ */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(13,13,13,.94); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2.5rem; height: 54px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .topbar-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: var(--gold); letter-spacing: .12em; font-weight: 300; }
+    .topbar-right { display: flex; align-items: center; gap: .8rem; }
+    .user-chip { display: flex; align-items: center; gap: .55rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 3px; padding: .28rem .75rem; font-size: .75rem; }
+    .user-chip-name { color: var(--text-mid); }
+    .role-pill { font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; padding: .15rem .4rem; border-radius: 2px; font-weight: 500; }
+    .role-pill.admin    { background: rgba(201,168,76,.15); color: var(--gold); border: 1px solid rgba(201,168,76,.3); }
+    .role-pill.visiteur { background: rgba(120,115,110,.12); color: var(--text-muted); border: 1px solid var(--border); }
+    .btn-top {
+      padding: .32rem .75rem; font-family: 'DM Sans', sans-serif; font-size: .7rem;
+      font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+      border-radius: var(--radius); cursor: pointer; transition: all .2s;
+      border: 1px solid var(--border); background: transparent; color: var(--text-muted);
+    }
+    .btn-top:hover { border-color: var(--gold); color: var(--gold); }
+ 
+    /* ══ HERO ══ */
     .hero {
       padding: 5rem 2.5rem 4rem;
       border-bottom: 1px solid var(--border);
       display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: end;
       background: radial-gradient(ellipse 60% 50% at 80% 50%, rgba(201,168,76,0.06) 0%, transparent 70%);
     }
-    .hero-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2.8rem, 5vw, 4.5rem);
-      font-weight: 300; line-height: 1.05; letter-spacing: -.01em;
-    }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 5vw, 4.5rem); font-weight: 300; line-height: 1.05; letter-spacing: -.01em; }
     .hero-title em { font-style: italic; color: var(--gold); }
-    .hero-sub {
-      margin-top: 1rem; color: var(--text-muted); font-size: .9rem; letter-spacing: .04em;
-    }
+    .hero-sub { margin-top: 1rem; color: var(--text-muted); font-size: .9rem; letter-spacing: .04em; }
  
-    /* ── STATS ── */
-    .stats-bar {
-      display: flex; gap: 0; border-bottom: 1px solid var(--border);
-    }
-    .stat {
-      flex: 1; padding: 1.8rem 2.5rem;
-      border-right: 1px solid var(--border);
-      transition: background .2s;
-    }
+    /* ══ STATS ══ */
+    .stats-bar { display: flex; border-bottom: 1px solid var(--border); }
+    .stat { flex: 1; padding: 1.8rem 2.5rem; border-right: 1px solid var(--border); transition: background .2s; }
     .stat:last-child { border-right: none; }
     .stat:hover { background: var(--bg-elevated); }
-    .stat-value {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2.2rem; font-weight: 400; color: var(--gold); line-height: 1;
-    }
-    .stat-label {
-      font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
-      color: var(--text-muted); margin-top: .4rem;
-    }
+    .stat-value { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 400; color: var(--gold); line-height: 1; }
+    .stat-label { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-muted); margin-top: .4rem; }
  
-    /* ── TOOLBAR ── */
-    .toolbar {
-      padding: 1.5rem 2.5rem;
-      display: flex; gap: 1rem; align-items: center;
-      border-bottom: 1px solid var(--border);
-      flex-wrap: wrap;
-    }
-    .search-wrap {
-      flex: 1; min-width: 200px; position: relative;
-    }
-    .search-wrap svg {
-      position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
-      color: var(--text-muted); pointer-events: none;
-    }
-    input[type=search], input[type=text], input[type=number], input[type=date],
+    /* ══ TOOLBAR ══ */
+    .toolbar { padding: 1.5rem 2.5rem; display: flex; gap: 1rem; align-items: center; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .search-wrap { flex: 1; min-width: 200px; position: relative; }
+    .search-wrap svg { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+    input[type=search], input[type=text], input[type=number], input[type=date], input[type=password],
     select, textarea {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: .875rem; font-weight: 300;
-      border-radius: var(--radius);
-      outline: none;
-      transition: border-color .2s;
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      color: var(--text); font-family: 'DM Sans', sans-serif;
+      font-size: .875rem; font-weight: 300; border-radius: var(--radius);
+      outline: none; transition: border-color .2s;
     }
-    input[type=search]:focus, input[type=text]:focus, input[type=number]:focus,
-    input[type=date]:focus, select:focus, textarea:focus {
-      border-color: var(--gold);
-    }
+    input:focus, select:focus, textarea:focus { border-color: var(--gold); }
     input[type=search] { width: 100%; padding: .65rem 1rem .65rem 2.6rem; }
     select { padding: .65rem 1rem; cursor: pointer; }
     select option { background: var(--bg-elevated); }
  
-    .btn {
-      padding: .65rem 1.4rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: .78rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
-      border: none; border-radius: var(--radius); cursor: pointer; transition: all .2s;
-      text-decoration: none; display: inline-flex; align-items: center; gap: .5rem;
-    }
+    /* ══ BUTTONS ══ */
+    .btn { padding: .65rem 1.4rem; font-family: 'DM Sans', sans-serif; font-size: .78rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; border: none; border-radius: var(--radius); cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: .5rem; }
     .btn-primary { background: var(--gold); color: #000; }
     .btn-primary:hover { background: var(--gold-light); }
-    .btn-ghost {
-      background: transparent; color: var(--text-muted);
-      border: 1px solid var(--border);
-    }
+    .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
     .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-danger { background: transparent; color: var(--red); border: 1px solid rgba(192,57,43,.3); }
+    .btn-danger:hover { background: rgba(192,57,43,.07); border-color: var(--red); }
  
-    /* ── GRID ── */
+    /* ══ GRID ══ */
     .grid-area { padding: 2.5rem; }
-    .coins-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5px;
-    }
-    .empty-state {
-      grid-column: 1/-1; text-align: center;
-      padding: 6rem 2rem; color: var(--text-muted);
-    }
+    .coins-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5px; }
+    .empty-state { grid-column: 1/-1; text-align: center; padding: 6rem 2rem; color: var(--text-muted); }
     .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; opacity: .3; }
     .empty-state p { font-size: .9rem; margin-bottom: 1.5rem; }
  
-    /* ── CARD ── */
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      overflow: hidden; cursor: pointer;
-      transition: transform .25s, border-color .25s, box-shadow .25s;
-      position: relative;
-    }
-    .card::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(201,168,76,.04) 0%, transparent 60%);
-      opacity: 0; transition: opacity .25s;
-    }
+    /* ══ CARD ══ */
+    .card { background: var(--bg-card); border: 1px solid var(--border); overflow: hidden; cursor: pointer; transition: transform .25s, border-color .25s, box-shadow .25s; position: relative; }
+    .card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(201,168,76,.04) 0%, transparent 60%); opacity: 0; transition: opacity .25s; }
     .card:hover { transform: translateY(-3px); border-color: var(--gold-dim); box-shadow: var(--shadow); }
     .card:hover::before { opacity: 1; }
-    .card-imgs {
-      display: grid; grid-template-columns: 1fr 1fr;
-      aspect-ratio: 2/1; background: #0A0A0A; gap: 1px;
-    }
-    .coin-img {
-      width: 100%; height: 100%; object-fit: contain;
-      padding: .8rem; background: #0A0A0A;
-    }
-    .coin-img-placeholder {
-      width: 100%; height: 100%;
-      display: flex; align-items: center; justify-content: center;
-      background: #0A0A0A; color: var(--text-muted); font-size: 1.8rem; opacity: .25;
-    }
+    .card-imgs { display: grid; grid-template-columns: 1fr 1fr; aspect-ratio: 2/1; background: #0A0A0A; gap: 1px; }
+    .coin-img { width: 100%; height: 100%; object-fit: contain; padding: .8rem; background: #0A0A0A; }
+    .coin-img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #0A0A0A; color: var(--text-muted); font-size: 1.8rem; opacity: .25; }
     .card-body { padding: 1.2rem 1.4rem 1.4rem; }
-    .card-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05rem; font-weight: 400; line-height: 1.3;
-      margin-bottom: .6rem;
-    }
+    .card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 400; line-height: 1.3; margin-bottom: .6rem; }
     .card-meta { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .8rem; }
-    .badge {
-      font-size: .65rem; letter-spacing: .1em; text-transform: uppercase;
-      padding: .2rem .55rem; border-radius: 2px;
-      background: rgba(201,168,76,0.1); color: var(--gold);
-      border: 1px solid rgba(201,168,76,0.2);
-    }
+    .badge { font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; padding: .2rem .55rem; border-radius: 2px; background: rgba(201,168,76,.1); color: var(--gold); border: 1px solid rgba(201,168,76,.2); }
     .badge.metal-ag { background: rgba(192,192,192,.08); color: #C0C0C0; border-color: rgba(192,192,192,.2); }
     .badge.metal-au { background: rgba(201,168,76,.12); color: var(--gold); border-color: rgba(201,168,76,.25); }
     .badge.metal-cu { background: rgba(180,100,50,.1); color: #B46432; border-color: rgba(180,100,50,.2); }
-    .card-specs {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: .3rem .8rem; font-size: .75rem; color: var(--text-muted);
-    }
+    .card-specs { display: grid; grid-template-columns: 1fr 1fr; gap: .3rem .8rem; font-size: .75rem; color: var(--text-muted); }
     .card-specs span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .card-specs strong { color: var(--text-mid); font-weight: 400; }
  
-    /* ── MODAL ── */
-    .overlay {
-      position: fixed; inset: 0; z-index: 200;
-      background: rgba(0,0,0,.8); backdrop-filter: blur(8px);
-      display: flex; align-items: center; justify-content: center;
-      padding: 1.5rem; opacity: 0; pointer-events: none; transition: opacity .3s;
-    }
+    /* ══ MODAL ══ */
+    .overlay { position: fixed; inset: 0; z-index: 500; background: rgba(0,0,0,.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 1.5rem; opacity: 0; pointer-events: none; transition: opacity .3s; }
     .overlay.open { opacity: 1; pointer-events: all; }
-    .modal {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      width: 100%; max-width: 820px; max-height: 90vh;
-      overflow-y: auto;
-      transform: translateY(20px); transition: transform .3s;
-    }
+    .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; width: 100%; max-width: 820px; max-height: 90vh; overflow-y: auto; transform: translateY(20px); transition: transform .3s; }
     .overlay.open .modal { transform: translateY(0); }
-    .modal-header {
-      padding: 1.8rem 2rem 0;
-      display: flex; justify-content: space-between; align-items: flex-start;
-    }
-    .modal-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.8rem; font-weight: 300; line-height: 1.2;
-    }
-    .modal-close {
-      background: none; border: 1px solid var(--border); color: var(--text-muted);
-      width: 2rem; height: 2rem; border-radius: 50%; cursor: pointer;
-      font-size: 1rem; display: flex; align-items: center; justify-content: center;
-      transition: all .2s; flex-shrink: 0;
-    }
+    .modal-header { padding: 1.8rem 2rem 0; display: flex; justify-content: space-between; align-items: flex-start; }
+    .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; line-height: 1.2; }
+    .modal-close { background: none; border: 1px solid var(--border); color: var(--text-muted); width: 2rem; height: 2rem; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all .2s; flex-shrink: 0; }
     .modal-close:hover { border-color: var(--gold); color: var(--gold); }
-    .detail-imgs {
-      display: flex; gap: 1rem; padding: 1.5rem 2rem;
-      background: #0A0A0A; margin: 1.2rem 0;
-      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-    }
-    .detail-img-wrap {
-      flex: 1; display: flex; flex-direction: column; align-items: center; gap: .5rem;
-    }
+    .detail-imgs { display: flex; gap: 1rem; padding: 1.5rem 2rem; background: #0A0A0A; margin: 1.2rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .detail-img-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: .5rem; }
     .detail-img-wrap img { max-height: 180px; object-fit: contain; border-radius: 2px; }
     .detail-img-label { font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); }
-    .detail-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 1px; background: var(--border);
-      margin: 0 2rem 2rem; border: 1px solid var(--border);
-    }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); margin: 0 2rem 2rem; border: 1px solid var(--border); }
     .detail-field { background: var(--bg-card); padding: .9rem 1.2rem; }
-    .detail-field label {
-      font-size: .65rem; letter-spacing: .12em; text-transform: uppercase;
-      color: var(--text-muted); display: block; margin-bottom: .2rem;
-    }
+    .detail-field label { font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: .2rem; }
     .detail-field span { font-size: .9rem; color: var(--text); }
  
-    /* ── FORM ── */
-    .form-overlay { z-index: 300; }
-    .form-modal {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      width: 100%; max-width: 700px; max-height: 92vh; overflow-y: auto;
-    }
-    .form-header {
-      padding: 1.8rem 2rem 1.2rem;
-      border-bottom: 1px solid var(--border);
-      display: flex; justify-content: space-between; align-items: center;
-      position: sticky; top: 0; background: var(--bg-card); z-index: 1;
-    }
-    .form-header h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem; font-weight: 300;
-    }
+    /* ══ FORM ══ */
+    .form-overlay { z-index: 600; }
+    .form-modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; width: 100%; max-width: 700px; max-height: 92vh; overflow-y: auto; transform: translateY(20px); transition: transform .3s; }
+    .overlay.open .form-modal { transform: translateY(0); }
+    .form-header { padding: 1.8rem 2rem 1.2rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--bg-card); z-index: 1; }
+    .form-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 300; }
     .form-body { padding: 1.5rem 2rem 2rem; }
     .form-section { margin-bottom: 1.8rem; }
-    .form-section-title {
-      font-size: .7rem; letter-spacing: .14em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 1rem;
-      padding-bottom: .5rem; border-bottom: 1px solid var(--border);
-    }
+    .form-section-title { font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; padding-bottom: .5rem; border-bottom: 1px solid var(--border); }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: .9rem; }
     .form-row.full { grid-template-columns: 1fr; }
-    .form-row.trio { grid-template-columns: 1fr 1fr 1fr; }    .field { display: flex; flex-direction: column; gap: .35rem; }
+    .form-row.trio { grid-template-columns: 1fr 1fr 1fr; }
+    .field { display: flex; flex-direction: column; gap: .35rem; }
     .field label { font-size: .72rem; letter-spacing: .08em; color: var(--text-muted); }
     .field input, .field select, .field textarea { padding: .6rem .9rem; width: 100%; }
     .field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
     .img-upload-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: .9rem; }
-    .img-upload {
-      border: 1px dashed var(--border); border-radius: var(--radius);
-      padding: 1.5rem; text-align: center; cursor: pointer;
-      transition: border-color .2s; position: relative; overflow: hidden;
-    }
+    .img-upload { border: 1px dashed var(--border); border-radius: var(--radius); padding: 1.5rem; text-align: center; cursor: pointer; transition: border-color .2s; }
     .img-upload:hover { border-color: var(--gold); }
     .img-upload input[type=file] { display: none; }
     .img-upload .upload-icon { font-size: 1.5rem; opacity: .3; margin-bottom: .4rem; }
     .img-upload p { font-size: .72rem; color: var(--text-muted); }
     .img-upload img { max-height: 100px; object-fit: contain; border-radius: 2px; }
-    .form-actions {
-      display: flex; gap: 1rem; justify-content: flex-end;
-      padding-top: 1rem; border-top: 1px solid var(--border);
-    }
+    .form-actions { display: flex; gap: 1rem; justify-content: flex-end; padding-top: 1rem; border-top: 1px solid var(--border); }
  
-    /* ── LOADING ── */
-    .loading-overlay {
-      position: fixed; inset: 0; z-index: 1000;
-      background: var(--bg);
-      display: flex; align-items: center; justify-content: center;
-      flex-direction: column; gap: 1rem;
-      transition: opacity .4s;
-    }
-    .loading-logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem; color: var(--gold); letter-spacing: .15em; font-weight: 300;
-    }
-    .loading-bar {
-      width: 120px; height: 1px; background: var(--border); border-radius: 1px; overflow: hidden;
-    }
-    .loading-bar-inner {
-      height: 100%; background: var(--gold);
-      animation: loadbar 1.2s ease-in-out infinite;
-    }
-    @keyframes loadbar {
-      0%   { width: 0%; margin-left: 0; }
-      50%  { width: 60%; margin-left: 20%; }
-      100% { width: 0%; margin-left: 100%; }
-    }
+    /* ══ ADMIN PANEL ══ */
+    .admin-overlay { z-index: 700; }
+    .admin-modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; width: 100%; max-width: 560px; max-height: 85vh; overflow-y: auto; transform: translateY(20px); transition: transform .3s; }
+    .overlay.open .admin-modal { transform: translateY(0); }
+    .admin-header { padding: 1.6rem 2rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--bg-card); z-index: 1; }
+    .admin-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 300; }
+    .user-list { padding: .8rem 0; }
+    .user-row { display: flex; align-items: center; justify-content: space-between; padding: .9rem 2rem; border-bottom: 1px solid rgba(201,168,76,.06); transition: background .15s; gap: 1rem; }
+    .user-row:last-child { border-bottom: none; }
+    .user-row:hover { background: var(--bg-elevated); }
+    .user-row-name { font-size: .88rem; color: var(--text); flex: 1; }
+    .user-row-date { font-size: .72rem; color: var(--text-muted); }
+    .role-select { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: .72rem; border-radius: var(--radius); outline: none; padding: .28rem .6rem; cursor: pointer; transition: border-color .2s; }
+    .role-select:focus { border-color: var(--gold); }
  
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
  
     @media (max-width: 600px) {
+      .topbar { padding: 0 1rem; }
+      .user-chip-name { display: none; }
       .hero { padding: 3rem 1rem 2rem; grid-template-columns: 1fr; }
       .stat { padding: 1.2rem 1rem; }
       .stat-value { font-size: 1.6rem; }
@@ -441,126 +301,160 @@
   <div class="loading-bar"><div class="loading-bar-inner"></div></div>
 </div>
  
-<!-- TOAST CONTAINER -->
+<!-- TOAST -->
 <div id="toast-container"></div>
  
-<section class="hero" id="collection">
-  <div>
-    <h1 class="hero-title">Ma <em>Collection</em><br>Numismatique</h1>
-    <p class="hero-sub">Version 1.3</p>
-  </div>
-  <button class="btn btn-primary" onclick="openForm()">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    Ajouter une pièce
-  </button>
-</section>
+<!-- ══════════════ AUTH ══════════════ -->
+<div id="authScreen">
+  <div class="auth-box">
+    <div class="auth-logo">Numisma</div>
+    <div class="auth-tagline">Collection Numismatique</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Connexion</button>
+      <button class="auth-tab"        onclick="switchTab('register')">Créer un compte</button>
+    </div>
  
-<section class="stats-bar" id="stats">
-  <div class="stat">
-    <div class="stat-value" id="stat-total">—</div>
-    <div class="stat-label">Pièces</div>
-  </div>
-  <div class="stat">
-    <div class="stat-value" id="stat-value">— €</div>
-    <div class="stat-label">Valeur faciale totale</div>
-  </div>
-  <div class="stat">
-    <div class="stat-value" id="stat-cost">— €</div>
-    <div class="stat-label">Prix d'achat total</div>
-  </div>
-  <div class="stat">
-    <div class="stat-value" id="stat-weight">— g</div>
-    <div class="stat-label">Poids total</div>
-  </div>
-</section>
+    <!-- LOGIN -->
+    <div id="tab-login">
+      <div class="auth-field">
+        <label>Nom d'utilisateur</label>
+        <input type="text" id="l-user" placeholder="votre pseudo" autocomplete="username"
+          onkeydown="if(event.key==='Enter')doLogin()" />
+      </div>
+      <div class="auth-field">
+        <label>Mot de passe</label>
+        <input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"
+          onkeydown="if(event.key==='Enter')doLogin()" />
+      </div>
+      <button class="auth-submit" id="loginBtn" onclick="doLogin()">Se connecter</button>
+    </div>
  
-<div class="toolbar">
-  <div class="search-wrap">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="search" id="searchInput" placeholder="Rechercher une pièce…" oninput="renderCoins()" />
+    <!-- REGISTER -->
+    <div id="tab-register" style="display:none">
+      <div class="auth-field">
+        <label>Nom d'utilisateur</label>
+        <input type="text" id="r-user" placeholder="choisissez un pseudo" autocomplete="username" />
+      </div>
+      <div class="auth-field">
+        <label>Mot de passe</label>
+        <input type="password" id="r-pass" placeholder="min. 6 caractères" autocomplete="new-password" />
+      </div>
+      <div class="auth-field">
+        <label>Confirmer le mot de passe</label>
+        <input type="password" id="r-pass2" placeholder="••••••••" autocomplete="new-password"
+          onkeydown="if(event.key==='Enter')doRegister()" />
+      </div>
+      <button class="auth-submit" id="registerBtn" onclick="doRegister()">Créer mon compte</button>
+    </div>
   </div>
-  <select id="filterMetal" onchange="renderCoins()">
-    <option value="">Tous les métaux</option>
-    <option value="Argent">Argent</option>
-    <option value="Or">Or</option>
-    <option value="Métal commun">Métal commun</option>
-    <option value="Autre">Autre</option>
-  </select>
-  <select id="filterQuality" onchange="renderCoins()">
-    <option value="">Toutes qualités</option>
-    <option value="BU">BU</option>
-    <option value="BE">BE</option>
-    <option value="Courant">Courant</option>
-    <option value="Circulée">Circulée</option>
-  </select>
-  <select id="sortBy" onchange="renderCoins()">
-    <option value="date_desc">Plus récent</option>
-    <option value="date_asc">Plus ancien</option>
-    <option value="year_desc">Année ↓</option>
-    <option value="year_asc">Année ↑</option>
-    <option value="price_desc">Prix ↓</option>
-    <option value="price_asc">Prix ↑</option>
-  </select>
 </div>
  
-<main class="grid-area">
-  <div class="coins-grid" id="coinsGrid"></div>
-</main>
+<!-- ══════════════ APP ══════════════ -->
+<div id="app" style="display:none">
  
-<!-- Detail modal -->
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <span class="topbar-logo">Numisma</span>
+    <div class="topbar-right">
+      <div class="user-chip">
+        <span class="user-chip-name" id="tbUser">—</span>
+        <span class="role-pill" id="tbRole">visiteur</span>
+      </div>
+      <button class="btn-top" id="adminBtn" style="display:none" onclick="openAdmin()">⚙ Utilisateurs</button>
+      <button class="btn-top" onclick="doLogout()">Déconnexion</button>
+    </div>
+  </div>
+ 
+  <!-- HERO -->
+  <section class="hero">
+    <div>
+      <h1 class="hero-title">Ma <em>Collection</em><br>Numismatique</h1>
+      <p class="hero-sub">Monnaie de Paris · Pièces modernes de collection</p>
+    </div>
+    <button class="btn btn-primary" id="addBtn" style="display:none" onclick="openForm()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Ajouter une pièce
+    </button>
+  </section>
+ 
+  <!-- STATS -->
+  <section class="stats-bar">
+    <div class="stat"><div class="stat-value" id="stat-total">—</div><div class="stat-label">Pièces</div></div>
+    <div class="stat"><div class="stat-value" id="stat-value">— €</div><div class="stat-label">Valeur faciale totale</div></div>
+    <div class="stat"><div class="stat-value" id="stat-cost">— €</div><div class="stat-label">Prix d'achat total</div></div>
+    <div class="stat"><div class="stat-value" id="stat-weight">— g</div><div class="stat-label">Poids total</div></div>
+  </section>
+ 
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="search" id="searchInput" placeholder="Rechercher une pièce…" oninput="renderCoins()" />
+    </div>
+    <select id="filterMetal" onchange="renderCoins()">
+      <option value="">Tous les métaux</option>
+      <option value="Argent">Argent</option>
+      <option value="Or">Or</option>
+      <option value="Métal commun">Métal commun</option>
+      <option value="Autre">Autre</option>
+    </select>
+    <select id="filterQuality" onchange="renderCoins()">
+      <option value="">Toutes qualités</option>
+      <option value="BU">BU</option>
+      <option value="BE">BE</option>
+      <option value="Courant">Courant</option>
+      <option value="Circulée">Circulée</option>
+    </select>
+    <select id="sortBy" onchange="renderCoins()">
+      <option value="date_desc">Plus récent</option>
+      <option value="date_asc">Plus ancien</option>
+      <option value="year_desc">Année ↓</option>
+      <option value="year_asc">Année ↑</option>
+      <option value="price_desc">Prix ↓</option>
+      <option value="price_asc">Prix ↑</option>
+    </select>
+  </div>
+ 
+  <!-- GRID -->
+  <main class="grid-area">
+    <div class="coins-grid" id="coinsGrid"></div>
+  </main>
+</div>
+ 
+<!-- DETAIL MODAL -->
 <div class="overlay" id="detailOverlay" onclick="closeDetail(event)">
   <div class="modal" id="detailModal"></div>
 </div>
  
-<!-- Form modal -->
+<!-- FORM MODAL -->
 <div class="overlay form-overlay" id="formOverlay" onclick="closeFormOverlay(event)">
-  <div class="form-modal" id="formModal">
+  <div class="form-modal">
     <div class="form-header">
       <h2 id="formTitle">Ajouter une pièce</h2>
       <button class="modal-close" onclick="closeForm()">✕</button>
     </div>
     <div class="form-body">
- 
       <div class="form-section">
         <div class="form-section-title">Identification</div>
-        <div class="form-row full">
-          <div class="field"><label>Titre *</label><input type="text" id="f-title" placeholder="ex. Semeuse — 10 €" /></div>
-        </div>
+        <div class="form-row full"><div class="field"><label>Titre *</label><input type="text" id="f-title" placeholder="ex. Semeuse — 10 €" /></div></div>
         <div class="form-row">
           <div class="field"><label>Année</label><input type="number" id="f-year" placeholder="2024" min="1800" max="2100" /></div>
           <div class="field"><label>Valeur faciale (€)</label><input type="number" id="f-facevalue" placeholder="10" step="0.01" /></div>
         </div>
         <div class="form-row">
           <div class="field"><label>Qualité</label>
-            <select id="f-quality">
-              <option value="">— Sélectionner —</option>
-              <option value="BU">BU (Brillant Universel)</option>
-              <option value="BE">BE (Belle Épreuve)</option>
-              <option value="Courant">Courant</option>
-              <option value="Circulée">Circulée</option>
-            </select>
+            <select id="f-quality"><option value="">— Sélectionner —</option><option value="BU">BU (Brillant Universel)</option><option value="BE">BE (Belle Épreuve)</option><option value="Courant">Courant</option><option value="Circulée">Circulée</option></select>
           </div>
           <div class="field"><label>État</label>
-            <select id="f-condition">
-              <option value="">— Sélectionner —</option>
-              <option value="Neuf">Neuf</option>
-              <option value="Occasion">Occasion</option>
-            </select>
+            <select id="f-condition"><option value="">— Sélectionner —</option><option value="Neuf">Neuf</option><option value="Occasion">Occasion</option></select>
           </div>
         </div>
       </div>
- 
       <div class="form-section">
         <div class="form-section-title">Caractéristiques techniques</div>
         <div class="form-row trio">
           <div class="field"><label>Métal</label>
-            <select id="f-metal">
-              <option value="">—</option>
-              <option value="Argent">Argent</option>
-              <option value="Or">Or</option>
-              <option value="Métal commun">Métal commun</option>
-              <option value="Autre">Autre</option>
-            </select>
+            <select id="f-metal"><option value="">—</option><option value="Argent">Argent</option><option value="Or">Or</option><option value="Métal commun">Métal commun</option><option value="Autre">Autre</option></select>
           </div>
           <div class="field"><label>Titre (‰)</label><input type="number" id="f-fineness" placeholder="ex. 999" min="1" max="999" /></div>
           <div class="field"><label>Tirage</label><input type="number" id="f-mintage" placeholder="ex. 5000" /></div>
@@ -570,7 +464,6 @@
           <div class="field"><label>Diamètre (mm)</label><input type="number" id="f-diameter" placeholder="ex. 37" step="0.1" /></div>
         </div>
       </div>
- 
       <div class="form-section">
         <div class="form-section-title">Acquisition</div>
         <div class="form-row trio">
@@ -581,18 +474,11 @@
         <div class="form-row">
           <div class="field"><label>Lieu / site d'achat</label><input type="text" id="f-seller" placeholder="ex. monnaiedeparis.fr" /></div>
           <div class="field"><label>Facture</label>
-            <select id="f-invoice">
-              <option value="">—</option>
-              <option value="Oui">Oui</option>
-              <option value="Non">Non</option>
-            </select>
+            <select id="f-invoice"><option value="">—</option><option value="Oui">Oui</option><option value="Non">Non</option></select>
           </div>
         </div>
-        <div class="form-row full">
-          <div class="field"><label>Anecdote / description</label><textarea id="f-note" placeholder="Notes, contexte historique…"></textarea></div>
-        </div>
+        <div class="form-row full"><div class="field"><label>Anecdote / description</label><textarea id="f-note" placeholder="Notes, contexte historique…"></textarea></div></div>
       </div>
- 
       <div class="form-section">
         <div class="form-section-title">Photos</div>
         <div class="img-upload-row">
@@ -610,7 +496,6 @@
           </div>
         </div>
       </div>
- 
       <div class="form-actions">
         <button class="btn btn-ghost" onclick="closeForm()">Annuler</button>
         <button class="btn btn-primary" id="saveBtn" onclick="saveForm()">Enregistrer la pièce</button>
@@ -619,124 +504,259 @@
   </div>
 </div>
  
+<!-- ADMIN MODAL -->
+<div class="overlay admin-overlay" id="adminOverlay" onclick="closeAdminOverlay(event)">
+  <div class="admin-modal">
+    <div class="admin-header">
+      <h2>Gestion des utilisateurs</h2>
+      <button class="modal-close" onclick="closeAdmin()">✕</button>
+    </div>
+    <div class="user-list" id="userList">
+      <div style="padding:2rem;text-align:center;color:var(--text-muted);font-size:.85rem">Chargement…</div>
+    </div>
+  </div>
+</div>
+ 
 <script>
 // ══════════════════════════════════════════════
-//  SUPABASE CONFIG
-//  ⚠️  Remplacez TABLE_NAME par le vrai nom de votre table
+//  CONFIG
 // ══════════════════════════════════════════════
-const SUPABASE_URL    = 'https://spollmzcbfatshuzuvfl.supabase.co';
-const SUPABASE_ANON   = 'sb_publishable_smFJ3wXwsXhgQLX_Dh5Xtw_8MdG71qD';
-const TABLE           = 'coins'; // ← adaptez si votre table a un autre nom
+const SUPABASE_URL  = 'https://spollmzcbfatshuzuvfl.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_smFJ3wXwsXhgQLX_Dh5Xtw_8MdG71qD';
+const TABLE         = 'coins';
+const USERS_TABLE   = 'users';
+const ADMIN_NAME    = 'ivafan';      // compte qui devient automatiquement admin
+const SESSION_KEY   = 'numisma_v1'; // clé localStorage
  
-async function sbFetch(path, options = {}) {
-  const url = `${SUPABASE_URL}/rest/v1/${path}`;
-  const res = await fetch(url, {
-    ...options,
+// ══════════════════════════════════════════════
+//  SUPABASE HELPER
+// ══════════════════════════════════════════════
+async function sb(path, opts = {}) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    ...opts,
     headers: {
       'apikey': SUPABASE_ANON,
       'Authorization': `Bearer ${SUPABASE_ANON}`,
       'Content-Type': 'application/json',
-      'Prefer': options.prefer || '',
-      ...(options.headers || {})
+      'Prefer': opts.prefer || '',
+      ...(opts.headers || {})
     }
   });
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(err);
-  }
+  if (!res.ok) throw new Error(await res.text());
   if (res.status === 204) return null;
   return res.json();
 }
  
 // ══════════════════════════════════════════════
-//  TOAST SYSTEM
+//  HASH (SHA-256)
+// ══════════════════════════════════════════════
+async function hash(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+ 
+// ══════════════════════════════════════════════
+//  TOAST
 // ══════════════════════════════════════════════
 function showToast({ type = 'success', title, message, confirm = false }) {
-  return new Promise((resolve) => {
-    const icons = { success: '✦', error: '✕', confirm: '◈' };
-    const container = document.getElementById('toast-container');
+  return new Promise(resolve => {
+    const icons = { success:'✦', error:'✕', confirm:'◈' };
     const el = document.createElement('div');
     el.className = `toast toast-${type}`;
- 
     el.innerHTML = `
-      <span class="toast-icon">${icons[type] || '✦'}</span>
+      <span class="toast-icon">${icons[type]||'✦'}</span>
       <div class="toast-body">
-        ${title ? `<div class="toast-title">${title}</div>` : ''}
+        ${title   ? `<div class="toast-title">${title}</div>`   : ''}
         ${message ? `<div class="toast-msg">${message}</div>` : ''}
-        ${confirm ? `
-          <div class="toast-actions">
-            <button class="toast-btn toast-btn-confirm" id="tc-confirm">Supprimer</button>
-            <button class="toast-btn toast-btn-cancel" id="tc-cancel">Annuler</button>
-          </div>` : ''}
+        ${confirm ? `<div class="toast-actions">
+          <button class="toast-btn toast-btn-confirm" id="tc">Confirmer</button>
+          <button class="toast-btn toast-btn-cancel"  id="tk">Annuler</button>
+        </div>` : ''}
       </div>
-      ${!confirm ? `<button class="toast-close" aria-label="Fermer">✕</button>` : ''}
-    `;
- 
-    container.appendChild(el);
- 
-    const dismiss = (result) => {
-      el.classList.add('leaving');
-      setTimeout(() => el.remove(), 260);
-      resolve(result);
-    };
- 
-    if (confirm) {
-      el.querySelector('#tc-confirm').onclick = () => dismiss(true);
-      el.querySelector('#tc-cancel').onclick  = () => dismiss(false);
-    } else {
-      el.querySelector('.toast-close').onclick = () => dismiss(null);
-      setTimeout(() => { if (el.isConnected) dismiss(null); }, 3500);
-    }
+      ${!confirm ? `<button class="toast-close">✕</button>` : ''}`;
+    document.getElementById('toast-container').appendChild(el);
+    const dismiss = r => { el.classList.add('leaving'); setTimeout(() => el.remove(), 260); resolve(r); };
+    if (confirm) { el.querySelector('#tc').onclick = () => dismiss(true); el.querySelector('#tk').onclick = () => dismiss(false); }
+    else { el.querySelector('.toast-close').onclick = () => dismiss(null); setTimeout(() => { if(el.isConnected) dismiss(null); }, 3500); }
   });
 }
  
 // ══════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════
-let coins = [];
-let editingId = null;
+let currentUser = null;
+let coins       = [];
+let editingId   = null;
+const isAdmin   = () => currentUser?.role === 'admin';
  
 // ══════════════════════════════════════════════
-//  INIT — charger depuis Supabase
+//  AUTH — onglets
+// ══════════════════════════════════════════════
+function switchTab(t) {
+  document.getElementById('tab-login').style.display    = t==='login'    ? '' : 'none';
+  document.getElementById('tab-register').style.display = t==='register' ? '' : 'none';
+  document.querySelectorAll('.auth-tab').forEach((b,i) => b.classList.toggle('active', i===(t==='login'?0:1)));
+}
+ 
+// ══════════════════════════════════════════════
+//  REGISTER
+// ══════════════════════════════════════════════
+async function doRegister() {
+  const username = document.getElementById('r-user').value.trim().toLowerCase();
+  const pass     = document.getElementById('r-pass').value;
+  const pass2    = document.getElementById('r-pass2').value;
+ 
+  if (!username)        { showToast({type:'error',title:'Champ requis',message:'Entrez un nom d\'utilisateur.'}); return; }
+  if (pass.length < 6)  { showToast({type:'error',title:'Mot de passe trop court',message:'Minimum 6 caractères.'}); return; }
+  if (pass !== pass2)   { showToast({type:'error',title:'Mots de passe différents',message:'Les deux saisies ne correspondent pas.'}); return; }
+ 
+  const btn = document.getElementById('registerBtn');
+  btn.disabled = true; btn.textContent = 'Création…';
+ 
+  try {
+    // Vérifier si le username est déjà pris
+    const existing = await sb(`${USERS_TABLE}?username=eq.${encodeURIComponent(username)}&select=id`);
+    if (existing?.length) { showToast({type:'error',title:'Nom déjà pris',message:'Ce pseudo est déjà utilisé.'}); return; }
+ 
+    const hashed = await hash(pass);
+    const role   = username === ADMIN_NAME ? 'admin' : 'visiteur';
+    const rows   = await sb(USERS_TABLE, { method:'POST', prefer:'return=representation', body: JSON.stringify({ username, password: hashed, role }) });
+ 
+    startSession(rows[0]);
+    showToast({type:'success', title:`Bienvenue, ${rows[0].username} !`, message:`Compte créé — rôle : ${rows[0].role}.`});
+  } catch(e) {
+    showToast({type:'error', title:'Erreur', message: e.message});
+  } finally {
+    btn.disabled = false; btn.textContent = 'Créer mon compte';
+  }
+}
+ 
+// ══════════════════════════════════════════════
+//  LOGIN
+// ══════════════════════════════════════════════
+async function doLogin() {
+  const username = document.getElementById('l-user').value.trim().toLowerCase();
+  const pass     = document.getElementById('l-pass').value;
+ 
+  if (!username || !pass) { showToast({type:'error',title:'Champs requis',message:'Remplissez tous les champs.'}); return; }
+ 
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Connexion…';
+ 
+  try {
+    const hashed = await hash(pass);
+    const rows   = await sb(`${USERS_TABLE}?username=eq.${encodeURIComponent(username)}&password=eq.${encodeURIComponent(hashed)}&select=*`);
+ 
+    if (!rows?.length) { showToast({type:'error',title:'Identifiants incorrects',message:'Nom d\'utilisateur ou mot de passe invalide.'}); return; }
+ 
+    startSession(rows[0]);
+    showToast({type:'success', title:`Bienvenue, ${rows[0].username} !`, message: rows[0].role==='admin' ? 'Connecté en tant qu\'administrateur.' : 'Connecté en mode visiteur.'});
+  } catch(e) {
+    showToast({type:'error', title:'Erreur', message: e.message});
+  } finally {
+    btn.disabled = false; btn.textContent = 'Se connecter';
+  }
+}
+ 
+// ══════════════════════════════════════════════
+//  SESSION
+// ══════════════════════════════════════════════
+function startSession(user) {
+  currentUser = user;
+  localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+  showApp();
+}
+ 
+function doLogout() {
+  localStorage.removeItem(SESSION_KEY);
+  currentUser = null; coins = [];
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('authScreen').classList.add('show');
+  document.getElementById('l-user').value = '';
+  document.getElementById('l-pass').value = '';
+  switchTab('login');
+}
+ 
+// ══════════════════════════════════════════════
+//  SHOW APP
+// ══════════════════════════════════════════════
+function showApp() {
+  document.getElementById('authScreen').classList.remove('show');
+  document.getElementById('app').style.display = 'block';
+ 
+  document.getElementById('tbUser').textContent = currentUser.username;
+  const pill = document.getElementById('tbRole');
+  pill.textContent = currentUser.role;
+  pill.className   = `role-pill ${currentUser.role}`;
+ 
+  document.getElementById('adminBtn').style.display = isAdmin() ? '' : 'none';
+  document.getElementById('addBtn').style.display   = isAdmin() ? '' : 'none';
+ 
+  loadCoins();
+}
+ 
+// ══════════════════════════════════════════════
+//  INIT
 // ══════════════════════════════════════════════
 async function init() {
-  try {
-    const data = await sbFetch(`${TABLE}?select=*&order=created_at.desc`);
-    coins = data || [];
-  } catch (e) {
-    showToast({ type: 'error', title: 'Erreur de connexion', message: 'Impossible de charger la collection.' });
-    coins = [];
+  const saved = localStorage.getItem(SESSION_KEY);
+  if (saved) {
+    try {
+      const cached = JSON.parse(saved);
+      // Rafraîchir depuis Supabase (au cas où le rôle a changé)
+      const fresh = await sb(`${USERS_TABLE}?id=eq.${cached.id}&select=*`);
+      if (fresh?.length) {
+        currentUser = fresh[0];
+        localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
+        showApp();
+      } else {
+        // Compte introuvable
+        localStorage.removeItem(SESSION_KEY);
+        document.getElementById('authScreen').classList.add('show');
+      }
+    } catch {
+      // Pas de réseau ? On utilise le cache
+      currentUser = JSON.parse(saved);
+      showApp();
+    }
+  } else {
+    document.getElementById('authScreen').classList.add('show');
   }
-  renderCoins();
-  // Masquer le loader
+ 
   const lo = document.getElementById('loadingOverlay');
   lo.style.opacity = '0';
   setTimeout(() => lo.remove(), 400);
 }
  
 // ══════════════════════════════════════════════
-//  STATS
+//  LOAD COINS
 // ══════════════════════════════════════════════
-function updateStats() {
-  const fmt = (v, decimals = 2) =>
-    v.toLocaleString('fr-FR', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
- 
-  document.getElementById('stat-total').textContent  = coins.reduce((s, c) => s + (parseInt(c.quantity) || 1), 0);
-  const val    = coins.reduce((s, c) => s + (parseFloat(c.facevalue) || 0) * (parseInt(c.quantity) || 1), 0);
-  document.getElementById('stat-value').textContent  = fmt(val) + ' €';
-  const cost   = coins.reduce((s, c) => s + (parseFloat(c.price) || 0) * (parseInt(c.quantity) || 1), 0);
-  document.getElementById('stat-cost').textContent   = fmt(cost) + ' €';
-  const weight = coins.reduce((s, c) => s + (parseFloat(c.weight) || 0) * (parseInt(c.quantity) || 1), 0);
-  document.getElementById('stat-weight').textContent = fmt(weight, 1) + ' g';
+async function loadCoins() {
+  try {
+    coins = await sb(`${TABLE}?select=*&order=created_at.desc`) || [];
+  } catch(e) {
+    showToast({type:'error', title:'Erreur de chargement', message: e.message});
+    coins = [];
+  }
+  renderCoins();
 }
  
 // ══════════════════════════════════════════════
-//  METAL BADGE CLASS
+//  STATS
 // ══════════════════════════════════════════════
+function updateStats() {
+  const fmt = (v, d=2) => v.toLocaleString('fr-FR', {minimumFractionDigits:d, maximumFractionDigits:d});
+  const qty = c => parseInt(c.quantity) || 1;
+  document.getElementById('stat-total').textContent  = coins.reduce((s,c) => s + qty(c), 0);
+  document.getElementById('stat-value').textContent  = fmt(coins.reduce((s,c) => s + (parseFloat(c.facevalue)||0) * qty(c), 0)) + ' €';
+  document.getElementById('stat-cost').textContent   = fmt(coins.reduce((s,c) => s + (parseFloat(c.price)||0)     * qty(c), 0)) + ' €';
+  document.getElementById('stat-weight').textContent = fmt(coins.reduce((s,c) => s + (parseFloat(c.weight)||0)    * qty(c), 0), 1) + ' g';
+}
+ 
 function metalClass(m) {
-  if (m === 'Argent')      return 'metal-ag';
-  if (m === 'Or')          return 'metal-au';
-  if (m === 'Métal commun') return 'metal-cu';
+  if (m==='Argent')       return 'metal-ag';
+  if (m==='Or')           return 'metal-au';
+  if (m==='Métal commun') return 'metal-cu';
   return '';
 }
  
@@ -751,31 +771,27 @@ function renderCoins() {
  
   let list = coins.filter(c => {
     if (q && !JSON.stringify(c).toLowerCase().includes(q)) return false;
-    if (fMetal && c.metal !== fMetal) return false;
-    if (fQual  && c.quality !== fQual) return false;
+    if (fMetal && c.metal   !== fMetal) return false;
+    if (fQual  && c.quality !== fQual)  return false;
     return true;
   });
- 
-  list.sort((a, b) => {
-    if (sort === 'date_desc') return new Date(b.created_at) - new Date(a.created_at);
-    if (sort === 'date_asc')  return new Date(a.created_at) - new Date(b.created_at);
-    if (sort === 'year_desc') return (b.year || 0) - (a.year || 0);
-    if (sort === 'year_asc')  return (a.year || 0) - (b.year || 0);
-    if (sort === 'price_desc') return (parseFloat(b.price) || 0) - (parseFloat(a.price) || 0);
-    if (sort === 'price_asc')  return (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0);
+  list.sort((a,b) => {
+    if (sort==='date_desc')  return new Date(b.created_at) - new Date(a.created_at);
+    if (sort==='date_asc')   return new Date(a.created_at) - new Date(b.created_at);
+    if (sort==='year_desc')  return (b.year||0) - (a.year||0);
+    if (sort==='year_asc')   return (a.year||0) - (b.year||0);
+    if (sort==='price_desc') return (parseFloat(b.price)||0) - (parseFloat(a.price)||0);
+    if (sort==='price_asc')  return (parseFloat(a.price)||0) - (parseFloat(b.price)||0);
     return 0;
   });
  
   const grid = document.getElementById('coinsGrid');
-  if (list.length === 0) {
-    grid.innerHTML = `
-      <div class="empty-state">
-        <div class="icon">🪙</div>
-        <p>${coins.length === 0 ? 'Votre collection est vide. Ajoutez votre première pièce !' : 'Aucune pièce ne correspond à vos critères.'}</p>
-        <button class="btn btn-primary" onclick="openForm()">Ajouter une pièce</button>
-      </div>`;
-    updateStats();
-    return;
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty-state"><div class="icon">🪙</div>
+      <p>${!coins.length ? 'La collection est vide.' : 'Aucune pièce ne correspond.'}</p>
+      ${isAdmin() ? `<button class="btn btn-primary" onclick="openForm()">Ajouter une pièce</button>` : ''}
+    </div>`;
+    updateStats(); return;
   }
  
   grid.innerHTML = list.map(c => `
@@ -787,44 +803,38 @@ function renderCoins() {
       <div class="card-body">
         <div class="card-title">${c.title}</div>
         <div class="card-meta">
-          ${c.year    ? `<span class="badge">${c.year}</span>` : ''}
-          ${c.quality ? `<span class="badge">${c.quality}</span>` : ''}
+          ${c.year    ? `<span class="badge">${c.year}</span>`                         : ''}
+          ${c.quality ? `<span class="badge">${c.quality}</span>`                      : ''}
           ${c.metal   ? `<span class="badge ${metalClass(c.metal)}">${c.metal}</span>` : ''}
         </div>
         <div class="card-specs">
-          ${c.facevalue ? `<span><strong>Faciale</strong> ${parseFloat(c.facevalue).toLocaleString('fr-FR')} €</span>` : ''}
-          ${c.price     ? `<span><strong>Achat</strong> ${parseFloat(c.price).toLocaleString('fr-FR', {minimumFractionDigits:2})} €</span>` : ''}
-          ${c.weight    ? `<span><strong>Poids</strong> ${c.weight} g</span>` : ''}
-          ${c.mintage   ? `<span><strong>Tirage</strong> ${parseInt(c.mintage).toLocaleString('fr-FR')}</span>` : ''}
+          ${c.facevalue                  ? `<span><strong>Faciale</strong> ${parseFloat(c.facevalue).toLocaleString('fr-FR')} €</span>` : ''}
+          ${isAdmin() && c.price         ? `<span><strong>Achat</strong> ${parseFloat(c.price).toLocaleString('fr-FR',{minimumFractionDigits:2})} €</span>` : ''}
+          ${c.weight                     ? `<span><strong>Poids</strong> ${c.weight} g</span>`   : ''}
           ${c.quantity && c.quantity > 1 ? `<span><strong>Quantité</strong> ×${c.quantity}</span>` : ''}
         </div>
       </div>
     </article>`).join('');
- 
   updateStats();
 }
  
 // ══════════════════════════════════════════════
-//  DETAIL MODAL
+//  DETAIL
 // ══════════════════════════════════════════════
 function openDetail(id) {
-  const c = coins.find(x => x.id === id);
-  if (!c) return;
- 
-  const field = (label, val) => {
-    if (!val && val !== 0) return '';
-    return `<div class="detail-field"><label>${label}</label><span>${val}</span></div>`;
-  };
+  const c = coins.find(x => x.id === id); if (!c) return;
+  const f = (label, val) => (!val && val!==0) ? '' :
+    `<div class="detail-field"><label>${label}</label><span>${val}</span></div>`;
  
   document.getElementById('detailModal').innerHTML = `
     <div class="modal-header">
       <div>
         <div class="modal-title">${c.title}</div>
         <div class="card-meta" style="margin-top:.6rem">
-          ${c.year      ? `<span class="badge">${c.year}</span>` : ''}
-          ${c.quality   ? `<span class="badge">${c.quality}</span>` : ''}
+          ${c.year      ? `<span class="badge">${c.year}</span>`                         : ''}
+          ${c.quality   ? `<span class="badge">${c.quality}</span>`                      : ''}
           ${c.metal     ? `<span class="badge ${metalClass(c.metal)}">${c.metal}</span>` : ''}
-          ${c.condition ? `<span class="badge">${c.condition}</span>` : ''}
+          ${c.condition ? `<span class="badge">${c.condition}</span>`                    : ''}
         </div>
       </div>
       <button class="modal-close" onclick="closeDetail()">✕</button>
@@ -835,32 +845,32 @@ function openDetail(id) {
         <span class="detail-img-label">Avers</span>
       </div>
       <div class="detail-img-wrap">
-        ${c.img_revers ? `<img src="${c.img_revers}" alt="Revers" />` : `<div style="height:140px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);opacity:.2;font-size:3rem;font-family:'Cormorant Garamond',serif;font-style:italic">Revers</div>`}
+        ${c.img_revers ? `<img src="${c.img_revers}" alt="Revers"/>` : `<div style="height:140px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);opacity:.2;font-size:3rem;font-family:'Cormorant Garamond',serif;font-style:italic">Revers</div>`}
         <span class="detail-img-label">Revers</span>
       </div>
     </div>
     <div class="detail-grid">
-      ${field('Année',       c.year)}
-      ${field('Valeur faciale', c.facevalue ? parseFloat(c.facevalue).toLocaleString('fr-FR', {minimumFractionDigits:2}) + ' €' : '')}
-      ${field('Qualité',     c.quality)}
-      ${field('Métal',       c.metal)}
-      ${field('Titre',       c.fineness ? c.fineness + ' ‰' : '')}
-      ${field('Poids',       c.weight   ? c.weight + ' g'   : '')}
-      ${field('Diamètre',    c.diameter ? c.diameter + ' mm': '')}
-      ${field('Tirage',      c.mintage  ? parseInt(c.mintage).toLocaleString('fr-FR') + ' ex.' : '')}
-      ${field('État',        c.condition)}
-      ${field('Facture',     c.invoice)}
-      ${field('Quantité',    c.quantity ?? 1)}
-      ${field("Prix d'achat", c.price   ? parseFloat(c.price).toLocaleString('fr-FR', {minimumFractionDigits:2}) + ' €' : '')}
-      ${field("Date d'achat", c.buydate ? new Date(c.buydate).toLocaleDateString('fr-FR') : '')}
-      ${field("Lieu d'achat", c.seller)}
+      ${f('Année',          c.year)}
+      ${f('Valeur faciale', c.facevalue ? parseFloat(c.facevalue).toLocaleString('fr-FR',{minimumFractionDigits:2})+' €' : '')}
+      ${f('Qualité',        c.quality)}
+      ${f('Métal',          c.metal)}
+      ${f('Titre',          c.fineness  ? c.fineness+' ‰'    : '')}
+      ${f('Poids',          c.weight    ? c.weight+' g'       : '')}
+      ${f('Diamètre',       c.diameter  ? c.diameter+' mm'    : '')}
+      ${f('Tirage',         c.mintage   ? parseInt(c.mintage).toLocaleString('fr-FR')+' ex.' : '')}
+      ${f('Quantité',       c.quantity ?? 1)}
+      ${f('État',           c.condition)}
+      ${f('Facture',        isAdmin() ? c.invoice : '')}
+      ${f("Prix d'achat",   isAdmin() && c.price   ? parseFloat(c.price).toLocaleString('fr-FR',{minimumFractionDigits:2})+' €' : '')}
+      ${f("Date d'achat",   isAdmin() && c.buydate ? new Date(c.buydate).toLocaleDateString('fr-FR') : '')}
+      ${f("Lieu d'achat",   isAdmin() ? c.seller : '')}
     </div>
     ${c.note ? `<div style="padding:0 2rem 1.5rem;color:var(--text-muted);font-size:.85rem;font-style:italic;line-height:1.7">"${c.note}"</div>` : ''}
+    ${isAdmin() ? `
     <div style="padding:1rem 2rem 1.8rem;display:flex;gap:.8rem;justify-content:flex-end;border-top:1px solid var(--border)">
-      <button class="btn btn-ghost" onclick="deleteConfirm('${c.id}')">Supprimer</button>
+      <button class="btn btn-danger" onclick="deleteConfirm('${c.id}')">Supprimer</button>
       <button class="btn btn-primary" onclick="editCoin('${c.id}')">Modifier</button>
-    </div>`;
- 
+    </div>` : ''}`;
   document.getElementById('detailOverlay').classList.add('open');
 }
  
@@ -874,23 +884,16 @@ function closeDetail(e) {
 // ══════════════════════════════════════════════
 async function deleteConfirm(id) {
   const c = coins.find(x => x.id === id);
-  const confirmed = await showToast({
-    type: 'confirm',
-    title: 'Supprimer cette pièce ?',
-    message: `« ${c?.title || 'Pièce'} » sera définitivement retirée de la collection.`,
-    confirm: true
-  });
- 
-  if (!confirmed) return;
- 
+  const ok = await showToast({type:'confirm', title:'Supprimer cette pièce ?', message:`« ${c?.title} » sera définitivement retirée de la collection.`, confirm:true});
+  if (!ok) return;
   try {
-    await sbFetch(`${TABLE}?id=eq.${id}`, { method: 'DELETE' });
+    await sb(`${TABLE}?id=eq.${id}`, { method:'DELETE' });
     coins = coins.filter(x => x.id !== id);
     document.getElementById('detailOverlay').classList.remove('open');
     renderCoins();
-    showToast({ type: 'success', title: 'Pièce supprimée', message: 'La collection a été mise à jour.' });
-  } catch (e) {
-    showToast({ type: 'error', title: 'Erreur', message: 'Impossible de supprimer la pièce.' });
+    showToast({type:'success', title:'Pièce supprimée', message:'La collection a été mise à jour.'});
+  } catch(e) {
+    showToast({type:'error', title:'Erreur', message: e.message});
   }
 }
  
@@ -898,153 +901,155 @@ async function deleteConfirm(id) {
 //  FORM
 // ══════════════════════════════════════════════
 function openForm() {
+  if (!isAdmin()) return;
   editingId = null;
   document.getElementById('formTitle').textContent = 'Ajouter une pièce';
   document.getElementById('saveBtn').textContent   = 'Enregistrer la pièce';
   clearForm();
   document.getElementById('formOverlay').classList.add('open');
 }
- 
-function closeForm() {
-  document.getElementById('formOverlay').classList.remove('open');
-}
- 
-function closeFormOverlay(e) {
-  if (e.target === document.getElementById('formOverlay')) closeForm();
-}
+function closeForm() { document.getElementById('formOverlay').classList.remove('open'); }
+function closeFormOverlay(e) { if (e.target===document.getElementById('formOverlay')) closeForm(); }
  
 function clearForm() {
   ['f-title','f-year','f-facevalue','f-quality','f-condition','f-metal',
    'f-fineness','f-mintage','f-weight','f-diameter','f-price','f-buydate',
-   'f-quantity','f-seller','f-invoice','f-note'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  ['prev-avers','prev-revers'].forEach(id => {
-    const img = document.getElementById(id);
-    img.src = ''; img.style.display = 'none';
-  });
-  document.getElementById('f-img-avers').value  = '';
+   'f-quantity','f-seller','f-invoice','f-note'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('f-quantity').value = '1';
+  ['prev-avers','prev-revers'].forEach(id => { const i=document.getElementById(id); i.src=''; i.style.display='none'; });
+  document.getElementById('f-img-avers').value = '';
   document.getElementById('f-img-revers').value = '';
 }
  
 function editCoin(id) {
-  const c = coins.find(x => x.id === id);
-  if (!c) return;
+  const c = coins.find(x => x.id === id); if (!c) return;
   editingId = id;
   closeDetail();
   document.getElementById('formTitle').textContent = 'Modifier la pièce';
   document.getElementById('saveBtn').textContent   = 'Mettre à jour';
- 
   const map = {
-    'f-title': c.title, 'f-year': c.year, 'f-facevalue': c.facevalue,
-    'f-quality': c.quality, 'f-condition': c.condition, 'f-metal': c.metal,
-    'f-fineness': c.fineness, 'f-mintage': c.mintage, 'f-weight': c.weight,
-    'f-diameter': c.diameter, 'f-price': c.price, 'f-buydate': c.buydate,
-    'f-quantity': c.quantity ?? 1,
-    'f-seller': c.seller, 'f-invoice': c.invoice, 'f-note': c.note
+    'f-title':c.title,'f-year':c.year,'f-facevalue':c.facevalue,'f-quality':c.quality,
+    'f-condition':c.condition,'f-metal':c.metal,'f-fineness':c.fineness,'f-mintage':c.mintage,
+    'f-weight':c.weight,'f-diameter':c.diameter,'f-price':c.price,'f-buydate':c.buydate,
+    'f-quantity':c.quantity??1,'f-seller':c.seller,'f-invoice':c.invoice,'f-note':c.note
   };
-  Object.entries(map).forEach(([elId, val]) => {
-    const el = document.getElementById(elId);
-    if (el && val != null) el.value = val;
-  });
- 
-  if (c.img_avers)  { const i = document.getElementById('prev-avers');  i.src = c.img_avers;  i.style.display = 'block'; }
-  if (c.img_revers) { const i = document.getElementById('prev-revers'); i.src = c.img_revers; i.style.display = 'block'; }
- 
+  Object.entries(map).forEach(([k,v]) => { const el=document.getElementById(k); if(el&&v!=null) el.value=v; });
+  if (c.img_avers)  { const i=document.getElementById('prev-avers');  i.src=c.img_avers;  i.style.display='block'; }
+  if (c.img_revers) { const i=document.getElementById('prev-revers'); i.src=c.img_revers; i.style.display='block'; }
   document.getElementById('formOverlay').classList.add('open');
 }
  
-function previewImg(input, previewId) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = document.getElementById(previewId);
-    img.src = e.target.result;
-    img.style.display = 'block';
-  };
-  reader.readAsDataURL(file);
+function previewImg(input, pid) {
+  const f = input.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = e => { const i=document.getElementById(pid); i.src=e.target.result; i.style.display='block'; };
+  r.readAsDataURL(f);
 }
  
-async function readImgAsBase64(inputId, existing) {
+async function readImg(inputId, existing) {
   const input = document.getElementById(inputId);
-  if (input.files && input.files[0]) {
-    return new Promise(res => {
-      const r = new FileReader();
-      r.onload = e => res(e.target.result);
-      r.readAsDataURL(input.files[0]);
-    });
-  }
+  if (input.files?.[0]) return new Promise(res => { const r=new FileReader(); r.onload=e=>res(e.target.result); r.readAsDataURL(input.files[0]); });
   return existing || null;
 }
  
 async function saveForm() {
+  if (!isAdmin()) return;
   const title = document.getElementById('f-title').value.trim();
-  if (!title) {
-    showToast({ type: 'error', title: 'Champ obligatoire', message: 'Le titre de la pièce est requis.' });
-    return;
-  }
+  if (!title) { showToast({type:'error',title:'Champ obligatoire',message:'Le titre est requis.'}); return; }
  
-  const saveBtn = document.getElementById('saveBtn');
-  saveBtn.disabled = true;
-  saveBtn.textContent = 'Enregistrement…';
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true; btn.textContent = 'Enregistrement…';
  
-  const existing   = editingId ? coins.find(x => x.id === editingId) : null;
-  const img_avers  = await readImgAsBase64('f-img-avers',  existing?.img_avers);
-  const img_revers = await readImgAsBase64('f-img-revers', existing?.img_revers);
+  const ex = editingId ? coins.find(x => x.id===editingId) : null;
+  const img_avers  = await readImg('f-img-avers',  ex?.img_avers);
+  const img_revers = await readImg('f-img-revers', ex?.img_revers);
  
   const payload = {
     title,
-    year:      parseInt(document.getElementById('f-year').value)      || null,
+    year:      parseInt(document.getElementById('f-year').value)        || null,
     facevalue: parseFloat(document.getElementById('f-facevalue').value) || null,
     quality:   document.getElementById('f-quality').value   || null,
     condition: document.getElementById('f-condition').value || null,
     metal:     document.getElementById('f-metal').value     || null,
-    fineness:  parseInt(document.getElementById('f-fineness').value)  || null,
-    mintage:   parseInt(document.getElementById('f-mintage').value)   || null,
-    weight:    parseFloat(document.getElementById('f-weight').value)  || null,
-    diameter:  parseFloat(document.getElementById('f-diameter').value)|| null,
-    price:     parseFloat(document.getElementById('f-price').value)   || null,
+    fineness:  parseInt(document.getElementById('f-fineness').value)    || null,
+    mintage:   parseInt(document.getElementById('f-mintage').value)     || null,
+    weight:    parseFloat(document.getElementById('f-weight').value)    || null,
+    diameter:  parseFloat(document.getElementById('f-diameter').value)  || null,
+    price:     parseFloat(document.getElementById('f-price').value)     || null,
     buydate:   document.getElementById('f-buydate').value   || null,
-    quantity:  parseInt(document.getElementById('f-quantity').value)  || 1,
+    quantity:  parseInt(document.getElementById('f-quantity').value)    || 1,
     seller:    document.getElementById('f-seller').value    || null,
     invoice:   document.getElementById('f-invoice').value   || null,
     note:      document.getElementById('f-note').value      || null,
-    img_avers,
-    img_revers
+    img_avers, img_revers
   };
  
   try {
     if (editingId) {
-      const updated = await sbFetch(`${TABLE}?id=eq.${editingId}`, {
-        method: 'PATCH',
-        prefer: 'return=representation',
-        body: JSON.stringify(payload)
-      });
-      const idx = coins.findIndex(x => x.id === editingId);
-      if (updated && updated[0]) coins[idx] = updated[0];
-      showToast({ type: 'success', title: 'Pièce mise à jour', message: `« ${title} » a été modifiée avec succès.` });
+      const res = await sb(`${TABLE}?id=eq.${editingId}`, {method:'PATCH', prefer:'return=representation', body:JSON.stringify(payload)});
+      const idx = coins.findIndex(x => x.id===editingId);
+      if (res?.[0]) coins[idx] = res[0];
+      showToast({type:'success', title:'Pièce mise à jour', message:`« ${title} » a été modifiée.`});
     } else {
-      const created = await sbFetch(TABLE, {
-        method: 'POST',
-        prefer: 'return=representation',
-        body: JSON.stringify(payload)
-      });
-      if (created && created[0]) coins.unshift(created[0]);
-      showToast({ type: 'success', title: 'Pièce ajoutée', message: `« ${title} » rejoint votre collection.` });
+      const res = await sb(TABLE, {method:'POST', prefer:'return=representation', body:JSON.stringify(payload)});
+      if (res?.[0]) coins.unshift(res[0]);
+      showToast({type:'success', title:'Pièce ajoutée', message:`« ${title} » rejoint votre collection.`});
     }
-    closeForm();
-    renderCoins();
-  } catch (e) {
-    showToast({ type: 'error', title: 'Erreur Supabase', message: e.message });
+    closeForm(); renderCoins();
+  } catch(e) {
+    showToast({type:'error', title:'Erreur Supabase', message: e.message});
   } finally {
-    saveBtn.disabled = false;
-    saveBtn.textContent = editingId ? 'Mettre à jour' : 'Enregistrer la pièce';
+    btn.disabled = false;
+    btn.textContent = editingId ? 'Mettre à jour' : 'Enregistrer la pièce';
   }
 }
  
-// ── INIT ──
+// ══════════════════════════════════════════════
+//  ADMIN — gestion utilisateurs
+// ══════════════════════════════════════════════
+async function openAdmin() {
+  if (!isAdmin()) return;
+  document.getElementById('adminOverlay').classList.add('open');
+  await loadUsers();
+}
+function closeAdmin() { document.getElementById('adminOverlay').classList.remove('open'); }
+function closeAdminOverlay(e) { if (e.target===document.getElementById('adminOverlay')) closeAdmin(); }
+ 
+async function loadUsers() {
+  const ul = document.getElementById('userList');
+  ul.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--text-muted);font-size:.85rem">Chargement…</div>';
+  try {
+    const users = await sb(`${USERS_TABLE}?select=id,username,role,created_at&order=created_at.asc`) || [];
+    ul.innerHTML = users.map(u => `
+      <div class="user-row">
+        <span class="user-row-name">${u.username}</span>
+        <span class="user-row-date">${new Date(u.created_at).toLocaleDateString('fr-FR')}</span>
+        ${u.username === ADMIN_NAME
+          ? `<span class="role-pill admin">admin</span>`
+          : `<select class="role-select" onchange="changeRole('${u.id}',this.value)">
+               <option value="visiteur" ${u.role==='visiteur'?'selected':''}>Visiteur</option>
+               <option value="admin"    ${u.role==='admin'   ?'selected':''}>Admin</option>
+             </select>`
+        }
+      </div>`).join('');
+  } catch(e) {
+    ul.innerHTML = `<div style="padding:2rem;color:var(--red);font-size:.82rem">${e.message}</div>`;
+  }
+}
+ 
+async function changeRole(userId, newRole) {
+  try {
+    await sb(`${USERS_TABLE}?id=eq.${userId}`, {method:'PATCH', body:JSON.stringify({role: newRole})});
+    showToast({type:'success', title:'Rôle mis à jour', message:`Rôle changé en ${newRole}.`});
+  } catch(e) {
+    showToast({type:'error', title:'Erreur', message: e.message});
+    await loadUsers(); // re-sync
+  }
+}
+ 
+// ══════════════════════════════════════════════
+//  START
+// ══════════════════════════════════════════════
 init();
 </script>
 </body>
