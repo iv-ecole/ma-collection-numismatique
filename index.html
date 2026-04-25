@@ -6,6 +6,7 @@
   <title>Numisma</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -284,6 +285,54 @@
     .role-select { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: .72rem; border-radius: var(--radius); outline: none; padding: .28rem .6rem; cursor: pointer; transition: border-color .2s; }
     .role-select:focus { border-color: var(--gold); }
 
+    /* ══ STATS MODAL ══ */
+    .stats-overlay { z-index: 800; }
+    .stats-modal {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+      width: 100%; max-width: 860px; max-height: 90vh; overflow-y: auto;
+      transform: translateY(20px); transition: transform .3s;
+    }
+    .overlay.open .stats-modal { transform: translateY(0); }
+    .stats-modal-header {
+      padding: 1.6rem 2rem; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; background: var(--bg-card); z-index: 1;
+    }
+    .stats-modal-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 300; }
+    .charts-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px; background: var(--border);
+      margin: 1.5rem 2rem;
+      border: 1px solid var(--border); border-radius: 4px; overflow: hidden;
+    }
+    .chart-cell {
+      background: var(--bg-card); padding: 1.4rem 1.2rem 1.2rem;
+      display: flex; flex-direction: column; align-items: center; gap: .8rem;
+    }
+    .chart-title {
+      font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--gold); align-self: flex-start;
+    }
+    .chart-canvas { width: 100% !important; max-width: 200px; }
+    .chart-legend { width: 100%; display: flex; flex-direction: column; gap: .35rem; margin-top: .3rem; }
+    .legend-item { display: flex; align-items: center; gap: .5rem; font-size: .72rem; color: var(--text-muted); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .legend-val { margin-left: auto; color: var(--text-mid); font-weight: 500; }
+    .stats-kpi-row {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border);
+      margin: 0 2rem 2rem; border: 1px solid var(--border); border-radius: 4px; overflow: hidden;
+    }
+    .kpi { background: var(--bg-elevated); padding: 1rem 1.2rem; }
+    .kpi-label { font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .3rem; }
+    .kpi-value { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--gold); line-height: 1; }
+    .kpi-sub { font-size: .7rem; color: var(--text-muted); margin-top: .2rem; }
+    @media (max-width: 640px) {
+      .charts-grid { grid-template-columns: 1fr; margin: 1rem; }
+      .stats-kpi-row { grid-template-columns: 1fr 1fr; margin: 0 1rem 1.5rem; }
+      .stats-modal-header { padding: 1.2rem 1rem; }
+    }
+
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
@@ -408,6 +457,7 @@
         <span class="role-pill" id="tbRole">visiteur</span>
       </div>
       <button class="btn-top" id="adminBtn" style="display:none" onclick="openAdmin()">⚙ Utilisateurs</button>
+      <button class="btn-top" onclick="openStats()">📊 Statistiques</button>
       <button class="btn-top" onclick="doLogout()">Déconnexion</button>
     </div>
   </div>
@@ -416,7 +466,7 @@
   <section class="hero">
     <div>
       <h1 class="hero-title">Ma <em>Collection</em><br>Numismatique</h1>
-      <p class="hero-sub">Version 2.1</p>
+      <p class="hero-sub">Version 3.0</p>
     </div>
     <button class="btn btn-primary" id="addBtn" style="display:none" onclick="openForm()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -557,6 +607,18 @@
         <button class="btn btn-primary" id="saveBtn" onclick="saveForm()">Enregistrer la pièce</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- STATS MODAL -->
+<div class="overlay stats-overlay" id="statsOverlay" onclick="closeStatsOverlay(event)">
+  <div class="stats-modal">
+    <div class="stats-modal-header">
+      <h2>Statistiques avancées</h2>
+      <button class="modal-close" onclick="closeStats()">✕</button>
+    </div>
+    <div class="stats-kpi-row" id="statsKpi"></div>
+    <div class="charts-grid" id="chartsGrid"></div>
   </div>
 </div>
 
@@ -1106,6 +1168,100 @@ async function changeRole(userId, newRole) {
     showToast({type:'error', title:'Erreur', message: e.message});
     await loadUsers(); // re-sync
   }
+}
+
+// ══════════════════════════════════════════════
+//  STATS AVANCÉES
+// ══════════════════════════════════════════════
+const CHART_COLORS = [
+  '#C9A84C','#E8C97A','#7A6230','#B0AA9E',
+  '#8B7355','#D4AF6E','#5A5040','#A08060',
+  '#F0D090','#6A5030','#C0A050','#907040'
+];
+
+function openStats() {
+  document.getElementById('statsOverlay').classList.add('open');
+  renderStats();
+}
+function closeStats() { document.getElementById('statsOverlay').classList.remove('open'); }
+function closeStatsOverlay(e) { if (e.target===document.getElementById('statsOverlay')) closeStats(); }
+
+function renderStats() {
+  if (!coins.length) {
+    document.getElementById('chartsGrid').innerHTML = '<div style="grid-column:1/-1;padding:3rem;text-align:center;color:var(--text-muted)">Aucune pièce dans la collection.</div>';
+    document.getElementById('statsKpi').innerHTML = '';
+    return;
+  }
+
+  const qty = c => parseInt(c.quantity) || 1;
+  const total     = coins.reduce((s,c) => s + qty(c), 0);
+  const totalVal  = coins.reduce((s,c) => s + (parseFloat(c.facevalue)||0)*qty(c), 0);
+  const totalCost = coins.reduce((s,c) => s + (parseFloat(c.price)||0)*qty(c), 0);
+  const totalW    = coins.reduce((s,c) => s + (parseFloat(c.weight)||0)*qty(c), 0);
+  const fmt = (v,d=2) => v.toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d});
+
+  // KPI row
+  const avgPrice = totalCost / total;
+  const forSale  = coins.filter(c => c.selling_price).length;
+  document.getElementById('statsKpi').innerHTML = `
+    <div class="kpi"><div class="kpi-label">Exemplaires</div><div class="kpi-value">${total}</div><div class="kpi-sub">${coins.length} référence${coins.length>1?'s':''}</div></div>
+    <div class="kpi"><div class="kpi-label">Valeur faciale</div><div class="kpi-value">${fmt(totalVal)} €</div><div class="kpi-sub">moy. ${fmt(totalVal/total)} € / pièce</div></div>
+    <div class="kpi"><div class="kpi-label">Investi</div><div class="kpi-value">${fmt(totalCost)} €</div><div class="kpi-sub">moy. ${fmt(avgPrice)} € / pièce</div></div>
+    <div class="kpi"><div class="kpi-label">Poids total</div><div class="kpi-value">${fmt(totalW,1)} g</div><div class="kpi-sub">${forSale} pièce${forSale>1?'s':''} en vente</div></div>
+  `;
+
+  // Grouping helper
+  function group(key, labelFn) {
+    const map = {};
+    coins.forEach(c => {
+      const k = (labelFn ? labelFn(c) : c[key]) || 'Non renseigné';
+      map[k] = (map[k]||0) + qty(c);
+    });
+    return Object.entries(map).sort((a,b)=>b[1]-a[1]);
+  }
+
+  const datasets = [
+    { title: 'Par métal',   data: group('metal') },
+    { title: 'Par qualité', data: group('quality') },
+    { title: 'Par année',   data: group('year') },
+  ];
+
+  // Destroy old charts
+  document.querySelectorAll('.chart-canvas').forEach(cv => {
+    const old = Chart.getChart(cv);
+    if (old) old.destroy();
+  });
+
+  document.getElementById('chartsGrid').innerHTML = datasets.map((ds, i) => `
+    <div class="chart-cell">
+      <div class="chart-title">${ds.title}</div>
+      <canvas class="chart-canvas" id="chart-${i}" height="200"></canvas>
+      <div class="chart-legend" id="legend-${i}"></div>
+    </div>`).join('');
+
+  datasets.forEach((ds, i) => {
+    const labels = ds.data.map(d=>d[0]);
+    const values = ds.data.map(d=>d[1]);
+    const colors = CHART_COLORS.slice(0, labels.length);
+    const total_ds = values.reduce((a,b)=>a+b,0);
+
+    new Chart(document.getElementById(`chart-${i}`), {
+      type: 'doughnut',
+      data: { labels, datasets: [{ data: values, backgroundColor: colors, borderColor: '#141414', borderWidth: 2, hoverOffset: 6 }] },
+      options: {
+        cutout: '68%',
+        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        animation: { duration: 600, easing: 'easeInOutQuart' }
+      }
+    });
+
+    document.getElementById(`legend-${i}`).innerHTML = ds.data.map((d,j) => `
+      <div class="legend-item">
+        <span class="legend-dot" style="background:${CHART_COLORS[j]}"></span>
+        <span>${d[0]}</span>
+        <span class="legend-val">${d[1]} (${Math.round(d[1]/total_ds*100)}%)</span>
+      </div>`).join('');
+  });
 }
 
 // ══════════════════════════════════════════════
