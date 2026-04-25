@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ma Collection — Monnaie de Paris</title>
+  <title>Ma Collection Numismatique</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
@@ -32,30 +32,113 @@
       min-height: 100vh;
       line-height: 1.6;
     }
-
-    /* ── HEADER ── */
-    header {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(13,13,13,0.92);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2.5rem;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 64px;
+ 
+    /* ── TOAST ── */
+    #toast-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+      pointer-events: none;
     }
-    .logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.35rem; font-weight: 400; letter-spacing: .08em;
-      color: var(--gold); text-decoration: none;
+    .toast {
+      pointer-events: all;
+      display: flex;
+      align-items: flex-start;
+      gap: .85rem;
+      padding: .95rem 1.2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.7), 0 0 0 1px rgba(201,168,76,.06);
+      min-width: 260px;
+      max-width: 360px;
+      animation: toastIn .3s cubic-bezier(.16,1,.3,1) forwards;
+      position: relative;
+      overflow: hidden;
     }
-    .logo span { color: var(--text-muted); font-weight: 300; }
-    nav { display: flex; gap: 2rem; }
-    nav a {
-      font-size: .8rem; letter-spacing: .12em; text-transform: uppercase;
-      color: var(--text-muted); text-decoration: none; transition: color .2s;
+    .toast::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
     }
-    nav a:hover, nav a.active { color: var(--gold); }
-
+    .toast.toast-success::before { background: var(--gold); }
+    .toast.toast-error::before   { background: #C0392B; }
+    .toast.toast-confirm::before { background: #7A6230; }
+    .toast-icon {
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: .1rem;
+    }
+    .toast-body { flex: 1; }
+    .toast-title {
+      font-size: .8rem;
+      font-weight: 500;
+      letter-spacing: .04em;
+      color: var(--text);
+      margin-bottom: .1rem;
+    }
+    .toast-msg {
+      font-size: .75rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .toast-actions {
+      display: flex;
+      gap: .5rem;
+      margin-top: .65rem;
+    }
+    .toast-btn {
+      padding: .3rem .75rem;
+      border-radius: 3px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: all .15s;
+    }
+    .toast-btn-confirm {
+      background: var(--gold);
+      color: #000;
+    }
+    .toast-btn-confirm:hover { background: var(--gold-light); }
+    .toast-btn-cancel {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .toast-btn-cancel:hover { border-color: var(--gold); color: var(--gold); }
+    .toast-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: .9rem;
+      padding: 0;
+      line-height: 1;
+      flex-shrink: 0;
+      transition: color .15s;
+    }
+    .toast-close:hover { color: var(--gold); }
+    .toast.leaving {
+      animation: toastOut .25s ease forwards;
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(24px) scale(.97); }
+      to   { opacity: 1; transform: translateX(0) scale(1); }
+    }
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateX(0) scale(1); }
+      to   { opacity: 0; transform: translateX(24px) scale(.97); }
+    }
+ 
     /* ── HERO ── */
     .hero {
       padding: 5rem 2.5rem 4rem;
@@ -72,7 +155,7 @@
     .hero-sub {
       margin-top: 1rem; color: var(--text-muted); font-size: .9rem; letter-spacing: .04em;
     }
-
+ 
     /* ── STATS ── */
     .stats-bar {
       display: flex; gap: 0; border-bottom: 1px solid var(--border);
@@ -92,7 +175,7 @@
       font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
       color: var(--text-muted); margin-top: .4rem;
     }
-
+ 
     /* ── TOOLBAR ── */
     .toolbar {
       padding: 1.5rem 2.5rem;
@@ -125,7 +208,7 @@
     input[type=search] { width: 100%; padding: .65rem 1rem .65rem 2.6rem; }
     select { padding: .65rem 1rem; cursor: pointer; }
     select option { background: var(--bg-elevated); }
-
+ 
     .btn {
       padding: .65rem 1.4rem;
       font-family: 'DM Sans', sans-serif;
@@ -133,16 +216,14 @@
       border: none; border-radius: var(--radius); cursor: pointer; transition: all .2s;
       text-decoration: none; display: inline-flex; align-items: center; gap: .5rem;
     }
-    .btn-primary {
-      background: var(--gold); color: #000;
-    }
+    .btn-primary { background: var(--gold); color: #000; }
     .btn-primary:hover { background: var(--gold-light); }
     .btn-ghost {
       background: transparent; color: var(--text-muted);
       border: 1px solid var(--border);
     }
     .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
-
+ 
     /* ── GRID ── */
     .grid-area { padding: 2.5rem; }
     .coins-grid {
@@ -156,7 +237,7 @@
     }
     .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; opacity: .3; }
     .empty-state p { font-size: .9rem; margin-bottom: 1.5rem; }
-
+ 
     /* ── CARD ── */
     .card {
       background: var(--bg-card);
@@ -172,7 +253,6 @@
     }
     .card:hover { transform: translateY(-3px); border-color: var(--gold-dim); box-shadow: var(--shadow); }
     .card:hover::before { opacity: 1; }
-
     .card-imgs {
       display: grid; grid-template-columns: 1fr 1fr;
       aspect-ratio: 2/1; background: #0A0A0A; gap: 1px;
@@ -192,9 +272,7 @@
       font-size: 1.05rem; font-weight: 400; line-height: 1.3;
       margin-bottom: .6rem;
     }
-    .card-meta {
-      display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .8rem;
-    }
+    .card-meta { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .8rem; }
     .badge {
       font-size: .65rem; letter-spacing: .1em; text-transform: uppercase;
       padding: .2rem .55rem; border-radius: 2px;
@@ -210,7 +288,7 @@
     }
     .card-specs span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .card-specs strong { color: var(--text-mid); font-weight: 400; }
-
+ 
     /* ── MODAL ── */
     .overlay {
       position: fixed; inset: 0; z-index: 200;
@@ -228,7 +306,6 @@
       transform: translateY(20px); transition: transform .3s;
     }
     .overlay.open .modal { transform: translateY(0); }
-
     .modal-header {
       padding: 1.8rem 2rem 0;
       display: flex; justify-content: space-between; align-items: flex-start;
@@ -244,8 +321,6 @@
       transition: all .2s; flex-shrink: 0;
     }
     .modal-close:hover { border-color: var(--gold); color: var(--gold); }
-
-    /* Detail view */
     .detail-imgs {
       display: flex; gap: 1rem; padding: 1.5rem 2rem;
       background: #0A0A0A; margin: 1.2rem 0;
@@ -254,27 +329,20 @@
     .detail-img-wrap {
       flex: 1; display: flex; flex-direction: column; align-items: center; gap: .5rem;
     }
-    .detail-img-wrap img {
-      max-height: 180px; object-fit: contain; border-radius: 2px;
-    }
+    .detail-img-wrap img { max-height: 180px; object-fit: contain; border-radius: 2px; }
     .detail-img-label { font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); }
     .detail-grid {
       display: grid; grid-template-columns: 1fr 1fr;
       gap: 1px; background: var(--border);
       margin: 0 2rem 2rem; border: 1px solid var(--border);
     }
-    .detail-field {
-      background: var(--bg-card);
-      padding: .9rem 1.2rem;
-    }
+    .detail-field { background: var(--bg-card); padding: .9rem 1.2rem; }
     .detail-field label {
       font-size: .65rem; letter-spacing: .12em; text-transform: uppercase;
       color: var(--text-muted); display: block; margin-bottom: .2rem;
     }
-    .detail-field span {
-      font-size: .9rem; color: var(--text);
-    }
-
+    .detail-field span { font-size: .9rem; color: var(--text); }
+ 
     /* ── FORM ── */
     .form-overlay { z-index: 300; }
     .form-modal {
@@ -294,9 +362,7 @@
       font-size: 1.5rem; font-weight: 300;
     }
     .form-body { padding: 1.5rem 2rem 2rem; }
-    .form-section {
-      margin-bottom: 1.8rem;
-    }
+    .form-section { margin-bottom: 1.8rem; }
     .form-section-title {
       font-size: .7rem; letter-spacing: .14em; text-transform: uppercase;
       color: var(--gold); margin-bottom: 1rem;
@@ -307,13 +373,9 @@
     .form-row.trio { grid-template-columns: 1fr 1fr 1fr; }
     .field { display: flex; flex-direction: column; gap: .35rem; }
     .field label { font-size: .72rem; letter-spacing: .08em; color: var(--text-muted); }
-    .field input, .field select, .field textarea {
-      padding: .6rem .9rem; width: 100%;
-    }
+    .field input, .field select, .field textarea { padding: .6rem .9rem; width: 100%; }
     .field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
-    .img-upload-row {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: .9rem;
-    }
+    .img-upload-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: .9rem; }
     .img-upload {
       border: 1px dashed var(--border); border-radius: var(--radius);
       padding: 1.5rem; text-align: center; cursor: pointer;
@@ -328,15 +390,37 @@
       display: flex; gap: 1rem; justify-content: flex-end;
       padding-top: 1rem; border-top: 1px solid var(--border);
     }
-
-    /* scrollbar */
+ 
+    /* ── LOADING ── */
+    .loading-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 1rem;
+      transition: opacity .4s;
+    }
+    .loading-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; color: var(--gold); letter-spacing: .15em; font-weight: 300;
+    }
+    .loading-bar {
+      width: 120px; height: 1px; background: var(--border); border-radius: 1px; overflow: hidden;
+    }
+    .loading-bar-inner {
+      height: 100%; background: var(--gold);
+      animation: loadbar 1.2s ease-in-out infinite;
+    }
+    @keyframes loadbar {
+      0%   { width: 0%; margin-left: 0; }
+      50%  { width: 60%; margin-left: 20%; }
+      100% { width: 0%; margin-left: 100%; }
+    }
+ 
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
+ 
     @media (max-width: 600px) {
-      header { padding: 0 1rem; }
-      nav { display: none; }
       .hero { padding: 3rem 1rem 2rem; grid-template-columns: 1fr; }
       .stat { padding: 1.2rem 1rem; }
       .stat-value { font-size: 1.6rem; }
@@ -345,50 +429,52 @@
       .form-row { grid-template-columns: 1fr; }
       .form-row.trio { grid-template-columns: 1fr 1fr; }
       .detail-grid { grid-template-columns: 1fr; }
+      #toast-container { right: 1rem; bottom: 1rem; left: 1rem; }
+      .toast { max-width: 100%; }
     }
   </style>
 </head>
 <body>
-
-<header>
-  <a class="logo" href="#">Collection <span>/ Monnaie de Paris</span></a>
-  <nav>
-    <a href="#collection" class="active">Collection</a>
-    <a href="#" onclick="openForm(); return false;">Ajouter</a>
-    <a href="#stats">Statistiques</a>
-  </nav>
-</header>
-
+ 
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-logo">Numisma</div>
+  <div class="loading-bar"><div class="loading-bar-inner"></div></div>
+</div>
+ 
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
+ 
 <section class="hero" id="collection">
   <div>
     <h1 class="hero-title">Ma <em>Collection</em><br>Numismatique</h1>
-    <p class="hero-sub">Version 1.0</p>
+    <p class="hero-sub">Version 1.1</p>
   </div>
   <button class="btn btn-primary" onclick="openForm()">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
     Ajouter une pièce
   </button>
 </section>
-
+ 
 <section class="stats-bar" id="stats">
   <div class="stat">
-    <div class="stat-value" id="stat-total">0</div>
+    <div class="stat-value" id="stat-total">—</div>
     <div class="stat-label">Pièces</div>
   </div>
   <div class="stat">
-    <div class="stat-value" id="stat-value">0 €</div>
+    <div class="stat-value" id="stat-value">— €</div>
     <div class="stat-label">Valeur faciale totale</div>
   </div>
   <div class="stat">
-    <div class="stat-value" id="stat-cost">0 €</div>
+    <div class="stat-value" id="stat-cost">— €</div>
     <div class="stat-label">Prix d'achat total</div>
   </div>
   <div class="stat">
-    <div class="stat-value" id="stat-weight">0 g</div>
+    <div class="stat-value" id="stat-weight">— g</div>
     <div class="stat-label">Poids total</div>
   </div>
 </section>
-
+ 
 <div class="toolbar">
   <div class="search-wrap">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -417,16 +503,16 @@
     <option value="price_asc">Prix ↑</option>
   </select>
 </div>
-
+ 
 <main class="grid-area">
   <div class="coins-grid" id="coinsGrid"></div>
 </main>
-
+ 
 <!-- Detail modal -->
 <div class="overlay" id="detailOverlay" onclick="closeDetail(event)">
   <div class="modal" id="detailModal"></div>
 </div>
-
+ 
 <!-- Form modal -->
 <div class="overlay form-overlay" id="formOverlay" onclick="closeFormOverlay(event)">
   <div class="form-modal" id="formModal">
@@ -435,28 +521,18 @@
       <button class="modal-close" onclick="closeForm()">✕</button>
     </div>
     <div class="form-body">
-
+ 
       <div class="form-section">
         <div class="form-section-title">Identification</div>
         <div class="form-row full">
-          <div class="field">
-            <label>Titre *</label>
-            <input type="text" id="f-title" placeholder="ex. Semeuse — 10 €" />
-          </div>
+          <div class="field"><label>Titre *</label><input type="text" id="f-title" placeholder="ex. Semeuse — 10 €" /></div>
         </div>
         <div class="form-row">
-          <div class="field">
-            <label>Année *</label>
-            <input type="number" id="f-year" placeholder="2024" min="1800" max="2100" />
-          </div>
-          <div class="field">
-            <label>Valeur faciale (€) *</label>
-            <input type="number" id="f-facevalue" placeholder="10" step="0.01" />
-          </div>
+          <div class="field"><label>Année</label><input type="number" id="f-year" placeholder="2024" min="1800" max="2100" /></div>
+          <div class="field"><label>Valeur faciale (€)</label><input type="number" id="f-facevalue" placeholder="10" step="0.01" /></div>
         </div>
         <div class="form-row">
-          <div class="field">
-            <label>Qualité</label>
+          <div class="field"><label>Qualité</label>
             <select id="f-quality">
               <option value="">— Sélectionner —</option>
               <option value="BU">BU (Brillant Universel)</option>
@@ -465,8 +541,7 @@
               <option value="Circulée">Circulée</option>
             </select>
           </div>
-          <div class="field">
-            <label>État</label>
+          <div class="field"><label>État</label>
             <select id="f-condition">
               <option value="">— Sélectionner —</option>
               <option value="Neuf">Neuf</option>
@@ -475,12 +550,11 @@
           </div>
         </div>
       </div>
-
+ 
       <div class="form-section">
         <div class="form-section-title">Caractéristiques techniques</div>
         <div class="form-row trio">
-          <div class="field">
-            <label>Métal</label>
+          <div class="field"><label>Métal</label>
             <select id="f-metal">
               <option value="">—</option>
               <option value="Argent">Argent</option>
@@ -489,46 +563,24 @@
               <option value="Autre">Autre</option>
             </select>
           </div>
-          <div class="field">
-            <label>Titre (‰)</label>
-            <input type="number" id="f-fineness" placeholder="ex. 999" min="1" max="999" />
-          </div>
-          <div class="field">
-            <label>Tirage</label>
-            <input type="number" id="f-mintage" placeholder="ex. 5000" />
-          </div>
+          <div class="field"><label>Titre (‰)</label><input type="number" id="f-fineness" placeholder="ex. 999" min="1" max="999" /></div>
+          <div class="field"><label>Tirage</label><input type="number" id="f-mintage" placeholder="ex. 5000" /></div>
         </div>
         <div class="form-row">
-          <div class="field">
-            <label>Poids (g)</label>
-            <input type="number" id="f-weight" placeholder="ex. 22.2" step="0.01" />
-          </div>
-          <div class="field">
-            <label>Diamètre (mm)</label>
-            <input type="number" id="f-diameter" placeholder="ex. 37" step="0.1" />
-          </div>
+          <div class="field"><label>Poids (g)</label><input type="number" id="f-weight" placeholder="ex. 22.2" step="0.01" /></div>
+          <div class="field"><label>Diamètre (mm)</label><input type="number" id="f-diameter" placeholder="ex. 37" step="0.1" /></div>
         </div>
       </div>
-
+ 
       <div class="form-section">
         <div class="form-section-title">Acquisition</div>
         <div class="form-row">
-          <div class="field">
-            <label>Prix d'achat (€)</label>
-            <input type="number" id="f-price" placeholder="ex. 59.90" step="0.01" />
-          </div>
-          <div class="field">
-            <label>Date d'achat</label>
-            <input type="date" id="f-buydate" />
-          </div>
+          <div class="field"><label>Prix d'achat (€)</label><input type="number" id="f-price" placeholder="ex. 59.90" step="0.01" /></div>
+          <div class="field"><label>Date d'achat</label><input type="date" id="f-buydate" /></div>
         </div>
         <div class="form-row">
-          <div class="field">
-            <label>Lieu / site d'achat</label>
-            <input type="text" id="f-seller" placeholder="ex. monnaiedeparis.fr" />
-          </div>
-          <div class="field">
-            <label>Facture</label>
+          <div class="field"><label>Lieu / site d'achat</label><input type="text" id="f-seller" placeholder="ex. monnaiedeparis.fr" /></div>
+          <div class="field"><label>Facture</label>
             <select id="f-invoice">
               <option value="">—</option>
               <option value="Oui">Oui</option>
@@ -537,13 +589,10 @@
           </div>
         </div>
         <div class="form-row full">
-          <div class="field">
-            <label>Anecdote / description</label>
-            <textarea id="f-note" placeholder="Notes, contexte historique…"></textarea>
-          </div>
+          <div class="field"><label>Anecdote / description</label><textarea id="f-note" placeholder="Notes, contexte historique…"></textarea></div>
         </div>
       </div>
-
+ 
       <div class="form-section">
         <div class="form-section-title">Photos</div>
         <div class="img-upload-row">
@@ -561,113 +610,219 @@
           </div>
         </div>
       </div>
-
+ 
       <div class="form-actions">
         <button class="btn btn-ghost" onclick="closeForm()">Annuler</button>
-        <button class="btn btn-primary" onclick="saveForm()">Enregistrer la pièce</button>
+        <button class="btn btn-primary" id="saveBtn" onclick="saveForm()">Enregistrer la pièce</button>
       </div>
     </div>
   </div>
 </div>
-
+ 
 <script>
-// ── STORAGE ──
-const STORAGE_KEY = 'mdp_collection_v1';
-let coins = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+// ══════════════════════════════════════════════
+//  SUPABASE CONFIG
+//  ⚠️  Remplacez TABLE_NAME par le vrai nom de votre table
+// ══════════════════════════════════════════════
+const SUPABASE_URL    = 'https://spollmzcbfatshuzuvfl.supabase.co';
+const SUPABASE_ANON   = 'sb_publishable_smFJ3wXwsXhgQLX_Dh5Xtw_8MdG71qD';
+const TABLE           = 'coins'; // ← adaptez si votre table a un autre nom
+ 
+async function sbFetch(path, options = {}) {
+  const url = `${SUPABASE_URL}/rest/v1/${path}`;
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      'apikey': SUPABASE_ANON,
+      'Authorization': `Bearer ${SUPABASE_ANON}`,
+      'Content-Type': 'application/json',
+      'Prefer': options.prefer || '',
+      ...(options.headers || {})
+    }
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(err);
+  }
+  if (res.status === 204) return null;
+  return res.json();
+}
+ 
+// ══════════════════════════════════════════════
+//  TOAST SYSTEM
+// ══════════════════════════════════════════════
+function showToast({ type = 'success', title, message, confirm = false }) {
+  return new Promise((resolve) => {
+    const icons = { success: '✦', error: '✕', confirm: '◈' };
+    const container = document.getElementById('toast-container');
+    const el = document.createElement('div');
+    el.className = `toast toast-${type}`;
+ 
+    el.innerHTML = `
+      <span class="toast-icon">${icons[type] || '✦'}</span>
+      <div class="toast-body">
+        ${title ? `<div class="toast-title">${title}</div>` : ''}
+        ${message ? `<div class="toast-msg">${message}</div>` : ''}
+        ${confirm ? `
+          <div class="toast-actions">
+            <button class="toast-btn toast-btn-confirm" id="tc-confirm">Supprimer</button>
+            <button class="toast-btn toast-btn-cancel" id="tc-cancel">Annuler</button>
+          </div>` : ''}
+      </div>
+      ${!confirm ? `<button class="toast-close" aria-label="Fermer">✕</button>` : ''}
+    `;
+ 
+    container.appendChild(el);
+ 
+    const dismiss = (result) => {
+      el.classList.add('leaving');
+      setTimeout(() => el.remove(), 260);
+      resolve(result);
+    };
+ 
+    if (confirm) {
+      el.querySelector('#tc-confirm').onclick = () => dismiss(true);
+      el.querySelector('#tc-cancel').onclick  = () => dismiss(false);
+    } else {
+      el.querySelector('.toast-close').onclick = () => dismiss(null);
+      setTimeout(() => { if (el.isConnected) dismiss(null); }, 3500);
+    }
+  });
+}
+ 
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+let coins = [];
 let editingId = null;
-
-function save() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(coins));
+ 
+// ══════════════════════════════════════════════
+//  INIT — charger depuis Supabase
+// ══════════════════════════════════════════════
+async function init() {
+  try {
+    const data = await sbFetch(`${TABLE}?select=*&order=created_at.desc`);
+    coins = data || [];
+  } catch (e) {
+    showToast({ type: 'error', title: 'Erreur de connexion', message: 'Impossible de charger la collection.' });
+    coins = [];
+  }
+  renderCoins();
+  // Masquer le loader
+  const lo = document.getElementById('loadingOverlay');
+  lo.style.opacity = '0';
+  setTimeout(() => lo.remove(), 400);
 }
-
-// ── STATS ──
+ 
+// ══════════════════════════════════════════════
+//  STATS
+// ══════════════════════════════════════════════
 function updateStats() {
-  document.getElementById('stat-total').textContent = coins.length;
-  const val = coins.reduce((s,c) => s + (parseFloat(c.facevalue)||0), 0);
-  document.getElementById('stat-value').textContent = val.toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' €';
-  const cost = coins.reduce((s,c) => s + (parseFloat(c.price)||0), 0);
-  document.getElementById('stat-cost').textContent = cost.toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' €';
-  const w = coins.reduce((s,c) => s + (parseFloat(c.weight)||0), 0);
-  document.getElementById('stat-weight').textContent = w.toLocaleString('fr-FR',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' g';
+  const fmt = (v, decimals = 2) =>
+    v.toLocaleString('fr-FR', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+ 
+  document.getElementById('stat-total').textContent  = coins.length;
+  const val    = coins.reduce((s, c) => s + (parseFloat(c.facevalue) || 0), 0);
+  document.getElementById('stat-value').textContent  = fmt(val) + ' €';
+  const cost   = coins.reduce((s, c) => s + (parseFloat(c.price) || 0), 0);
+  document.getElementById('stat-cost').textContent   = fmt(cost) + ' €';
+  const weight = coins.reduce((s, c) => s + (parseFloat(c.weight) || 0), 0);
+  document.getElementById('stat-weight').textContent = fmt(weight, 1) + ' g';
 }
-
-// ── METAL BADGE CLASS ──
+ 
+// ══════════════════════════════════════════════
+//  METAL BADGE CLASS
+// ══════════════════════════════════════════════
 function metalClass(m) {
-  if (!m) return '';
-  if (m === 'Argent') return 'metal-ag';
-  if (m === 'Or') return 'metal-au';
+  if (m === 'Argent')      return 'metal-ag';
+  if (m === 'Or')          return 'metal-au';
   if (m === 'Métal commun') return 'metal-cu';
   return '';
 }
-
-// ── RENDER GRID ──
+ 
+// ══════════════════════════════════════════════
+//  RENDER GRID
+// ══════════════════════════════════════════════
 function renderCoins() {
-  const q = document.getElementById('searchInput').value.toLowerCase();
+  const q      = document.getElementById('searchInput').value.toLowerCase();
   const fMetal = document.getElementById('filterMetal').value;
-  const fQual = document.getElementById('filterQuality').value;
-  const sort = document.getElementById('sortBy').value;
-
+  const fQual  = document.getElementById('filterQuality').value;
+  const sort   = document.getElementById('sortBy').value;
+ 
   let list = coins.filter(c => {
     if (q && !JSON.stringify(c).toLowerCase().includes(q)) return false;
     if (fMetal && c.metal !== fMetal) return false;
-    if (fQual && c.quality !== fQual) return false;
+    if (fQual  && c.quality !== fQual) return false;
     return true;
   });
-
-  list.sort((a,b) => {
-    if (sort === 'date_desc') return (b.buydate||'').localeCompare(a.buydate||'');
-    if (sort === 'date_asc') return (a.buydate||'').localeCompare(b.buydate||'');
-    if (sort === 'year_desc') return (b.year||0)-(a.year||0);
-    if (sort === 'year_asc') return (a.year||0)-(b.year||0);
-    if (sort === 'price_desc') return (parseFloat(b.price)||0)-(parseFloat(a.price)||0);
-    if (sort === 'price_asc') return (parseFloat(a.price)||0)-(parseFloat(b.price)||0);
+ 
+  list.sort((a, b) => {
+    if (sort === 'date_desc') return new Date(b.created_at) - new Date(a.created_at);
+    if (sort === 'date_asc')  return new Date(a.created_at) - new Date(b.created_at);
+    if (sort === 'year_desc') return (b.year || 0) - (a.year || 0);
+    if (sort === 'year_asc')  return (a.year || 0) - (b.year || 0);
+    if (sort === 'price_desc') return (parseFloat(b.price) || 0) - (parseFloat(a.price) || 0);
+    if (sort === 'price_asc')  return (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0);
     return 0;
   });
-
+ 
   const grid = document.getElementById('coinsGrid');
   if (list.length === 0) {
-    grid.innerHTML = `<div class="empty-state"><div class="icon">🪙</div><p>${coins.length===0?'Votre collection est vide. Ajoutez votre première pièce !':'Aucune pièce ne correspond à vos critères.'}</p><button class="btn btn-primary" onclick="openForm()">Ajouter une pièce</button></div>`;
-    updateStats(); return;
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">🪙</div>
+        <p>${coins.length === 0 ? 'Votre collection est vide. Ajoutez votre première pièce !' : 'Aucune pièce ne correspond à vos critères.'}</p>
+        <button class="btn btn-primary" onclick="openForm()">Ajouter une pièce</button>
+      </div>`;
+    updateStats();
+    return;
   }
-
+ 
   grid.innerHTML = list.map(c => `
     <article class="card" onclick="openDetail('${c.id}')">
       <div class="card-imgs">
-        ${c.imgAvers ? `<img class="coin-img" src="${c.imgAvers}" alt="Avers" />` : `<div class="coin-img-placeholder">A</div>`}
-        ${c.imgRevers ? `<img class="coin-img" src="${c.imgRevers}" alt="Revers" />` : `<div class="coin-img-placeholder">R</div>`}
+        ${c.img_avers  ? `<img class="coin-img" src="${c.img_avers}"  alt="Avers" />`  : `<div class="coin-img-placeholder">A</div>`}
+        ${c.img_revers ? `<img class="coin-img" src="${c.img_revers}" alt="Revers" />` : `<div class="coin-img-placeholder">R</div>`}
       </div>
       <div class="card-body">
         <div class="card-title">${c.title}</div>
         <div class="card-meta">
-          ${c.year ? `<span class="badge">${c.year}</span>` : ''}
+          ${c.year    ? `<span class="badge">${c.year}</span>` : ''}
           ${c.quality ? `<span class="badge">${c.quality}</span>` : ''}
-          ${c.metal ? `<span class="badge ${metalClass(c.metal)}">${c.metal}</span>` : ''}
+          ${c.metal   ? `<span class="badge ${metalClass(c.metal)}">${c.metal}</span>` : ''}
         </div>
         <div class="card-specs">
           ${c.facevalue ? `<span><strong>Faciale</strong> ${parseFloat(c.facevalue).toLocaleString('fr-FR')} €</span>` : ''}
-          ${c.price ? `<span><strong>Achat</strong> ${parseFloat(c.price).toLocaleString('fr-FR',{minimumFractionDigits:2})} €</span>` : ''}
-          ${c.weight ? `<span><strong>Poids</strong> ${c.weight} g</span>` : ''}
-          ${c.mintage ? `<span><strong>Tirage</strong> ${parseInt(c.mintage).toLocaleString('fr-FR')}</span>` : ''}
+          ${c.price     ? `<span><strong>Achat</strong> ${parseFloat(c.price).toLocaleString('fr-FR', {minimumFractionDigits:2})} €</span>` : ''}
+          ${c.weight    ? `<span><strong>Poids</strong> ${c.weight} g</span>` : ''}
+          ${c.mintage   ? `<span><strong>Tirage</strong> ${parseInt(c.mintage).toLocaleString('fr-FR')}</span>` : ''}
         </div>
       </div>
-    </article>
-  `).join('');
+    </article>`).join('');
+ 
   updateStats();
 }
-
-// ── DETAIL ──
+ 
+// ══════════════════════════════════════════════
+//  DETAIL MODAL
+// ══════════════════════════════════════════════
 function openDetail(id) {
   const c = coins.find(x => x.id === id);
   if (!c) return;
-  const m = document.getElementById('detailModal');
-  m.innerHTML = `
+ 
+  const field = (label, val) => {
+    if (!val && val !== 0) return '';
+    return `<div class="detail-field"><label>${label}</label><span>${val}</span></div>`;
+  };
+ 
+  document.getElementById('detailModal').innerHTML = `
     <div class="modal-header">
       <div>
         <div class="modal-title">${c.title}</div>
         <div class="card-meta" style="margin-top:.6rem">
-          ${c.year ? `<span class="badge">${c.year}</span>` : ''}
-          ${c.quality ? `<span class="badge">${c.quality}</span>` : ''}
-          ${c.metal ? `<span class="badge ${metalClass(c.metal)}">${c.metal}</span>` : ''}
+          ${c.year      ? `<span class="badge">${c.year}</span>` : ''}
+          ${c.quality   ? `<span class="badge">${c.quality}</span>` : ''}
+          ${c.metal     ? `<span class="badge ${metalClass(c.metal)}">${c.metal}</span>` : ''}
           ${c.condition ? `<span class="badge">${c.condition}</span>` : ''}
         </div>
       </div>
@@ -675,26 +830,26 @@ function openDetail(id) {
     </div>
     <div class="detail-imgs">
       <div class="detail-img-wrap">
-        ${c.imgAvers ? `<img src="${c.imgAvers}" alt="Avers" />` : `<div style="height:140px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);opacity:.2;font-size:3rem">A</div>`}
+        ${c.img_avers  ? `<img src="${c.img_avers}"  alt="Avers" />` : `<div style="height:140px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);opacity:.2;font-size:3rem;font-family:'Cormorant Garamond',serif;font-style:italic">Avers</div>`}
         <span class="detail-img-label">Avers</span>
       </div>
       <div class="detail-img-wrap">
-        ${c.imgRevers ? `<img src="${c.imgRevers}" alt="Revers" />` : `<div style="height:140px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);opacity:.2;font-size:3rem">R</div>`}
+        ${c.img_revers ? `<img src="${c.img_revers}" alt="Revers" />` : `<div style="height:140px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);opacity:.2;font-size:3rem;font-family:'Cormorant Garamond',serif;font-style:italic">Revers</div>`}
         <span class="detail-img-label">Revers</span>
       </div>
     </div>
     <div class="detail-grid">
-      ${field('Année', c.year)}
-      ${field('Valeur faciale', c.facevalue ? parseFloat(c.facevalue).toLocaleString('fr-FR',{minimumFractionDigits:2}) + ' €' : '')}
-      ${field('Qualité', c.quality)}
-      ${field('Métal', c.metal)}
-      ${field('Titre', c.fineness ? c.fineness + ' ‰' : '')}
-      ${field('Poids', c.weight ? c.weight + ' g' : '')}
-      ${field('Diamètre', c.diameter ? c.diameter + ' mm' : '')}
-      ${field('Tirage', c.mintage ? parseInt(c.mintage).toLocaleString('fr-FR') + ' ex.' : '')}
-      ${field('État', c.condition)}
-      ${field('Facture', c.invoice)}
-      ${field("Prix d'achat", c.price ? parseFloat(c.price).toLocaleString('fr-FR',{minimumFractionDigits:2}) + ' €' : '')}
+      ${field('Année',       c.year)}
+      ${field('Valeur faciale', c.facevalue ? parseFloat(c.facevalue).toLocaleString('fr-FR', {minimumFractionDigits:2}) + ' €' : '')}
+      ${field('Qualité',     c.quality)}
+      ${field('Métal',       c.metal)}
+      ${field('Titre',       c.fineness ? c.fineness + ' ‰' : '')}
+      ${field('Poids',       c.weight   ? c.weight + ' g'   : '')}
+      ${field('Diamètre',    c.diameter ? c.diameter + ' mm': '')}
+      ${field('Tirage',      c.mintage  ? parseInt(c.mintage).toLocaleString('fr-FR') + ' ex.' : '')}
+      ${field('État',        c.condition)}
+      ${field('Facture',     c.invoice)}
+      ${field("Prix d'achat", c.price   ? parseFloat(c.price).toLocaleString('fr-FR', {minimumFractionDigits:2}) + ' €' : '')}
       ${field("Date d'achat", c.buydate ? new Date(c.buydate).toLocaleDateString('fr-FR') : '')}
       ${field("Lieu d'achat", c.seller)}
     </div>
@@ -702,54 +857,83 @@ function openDetail(id) {
     <div style="padding:1rem 2rem 1.8rem;display:flex;gap:.8rem;justify-content:flex-end;border-top:1px solid var(--border)">
       <button class="btn btn-ghost" onclick="deleteConfirm('${c.id}')">Supprimer</button>
       <button class="btn btn-primary" onclick="editCoin('${c.id}')">Modifier</button>
-    </div>
-  `;
+    </div>`;
+ 
   document.getElementById('detailOverlay').classList.add('open');
 }
-
-function field(label, val) {
-  if (!val && val !== 0) return '';
-  return `<div class="detail-field"><label>${label}</label><span>${val}</span></div>`;
-}
-
+ 
 function closeDetail(e) {
   if (e && e.target !== document.getElementById('detailOverlay')) return;
   document.getElementById('detailOverlay').classList.remove('open');
 }
-
-// ── FORM ──
+ 
+// ══════════════════════════════════════════════
+//  DELETE
+// ══════════════════════════════════════════════
+async function deleteConfirm(id) {
+  const c = coins.find(x => x.id === id);
+  const confirmed = await showToast({
+    type: 'confirm',
+    title: 'Supprimer cette pièce ?',
+    message: `« ${c?.title || 'Pièce'} » sera définitivement retirée de la collection.`,
+    confirm: true
+  });
+ 
+  if (!confirmed) return;
+ 
+  try {
+    await sbFetch(`${TABLE}?id=eq.${id}`, { method: 'DELETE' });
+    coins = coins.filter(x => x.id !== id);
+    document.getElementById('detailOverlay').classList.remove('open');
+    renderCoins();
+    showToast({ type: 'success', title: 'Pièce supprimée', message: 'La collection a été mise à jour.' });
+  } catch (e) {
+    showToast({ type: 'error', title: 'Erreur', message: 'Impossible de supprimer la pièce.' });
+  }
+}
+ 
+// ══════════════════════════════════════════════
+//  FORM
+// ══════════════════════════════════════════════
 function openForm() {
   editingId = null;
   document.getElementById('formTitle').textContent = 'Ajouter une pièce';
+  document.getElementById('saveBtn').textContent   = 'Enregistrer la pièce';
   clearForm();
   document.getElementById('formOverlay').classList.add('open');
 }
-
+ 
 function closeForm() {
   document.getElementById('formOverlay').classList.remove('open');
 }
+ 
 function closeFormOverlay(e) {
   if (e.target === document.getElementById('formOverlay')) closeForm();
 }
-
+ 
 function clearForm() {
-  ['f-title','f-year','f-facevalue','f-quality','f-condition','f-metal','f-fineness',
-   'f-mintage','f-weight','f-diameter','f-price','f-buydate','f-seller','f-invoice','f-note']
-    .forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  ['f-title','f-year','f-facevalue','f-quality','f-condition','f-metal',
+   'f-fineness','f-mintage','f-weight','f-diameter','f-price','f-buydate',
+   'f-seller','f-invoice','f-note'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
   ['prev-avers','prev-revers'].forEach(id => {
     const img = document.getElementById(id);
     img.src = ''; img.style.display = 'none';
   });
-  document.getElementById('f-img-avers').value = '';
+  document.getElementById('f-img-avers').value  = '';
   document.getElementById('f-img-revers').value = '';
 }
-
+ 
 function editCoin(id) {
   const c = coins.find(x => x.id === id);
   if (!c) return;
   editingId = id;
   closeDetail();
   document.getElementById('formTitle').textContent = 'Modifier la pièce';
+  document.getElementById('saveBtn').textContent   = 'Mettre à jour';
+ 
   const map = {
     'f-title': c.title, 'f-year': c.year, 'f-facevalue': c.facevalue,
     'f-quality': c.quality, 'f-condition': c.condition, 'f-metal': c.metal,
@@ -757,15 +941,17 @@ function editCoin(id) {
     'f-diameter': c.diameter, 'f-price': c.price, 'f-buydate': c.buydate,
     'f-seller': c.seller, 'f-invoice': c.invoice, 'f-note': c.note
   };
-  Object.entries(map).forEach(([id, val]) => {
-    const el = document.getElementById(id);
-    if (el && val !== undefined) el.value = val;
+  Object.entries(map).forEach(([elId, val]) => {
+    const el = document.getElementById(elId);
+    if (el && val != null) el.value = val;
   });
-  if (c.imgAvers) { document.getElementById('prev-avers').src = c.imgAvers; document.getElementById('prev-avers').style.display = 'block'; }
-  if (c.imgRevers) { document.getElementById('prev-revers').src = c.imgRevers; document.getElementById('prev-revers').style.display = 'block'; }
+ 
+  if (c.img_avers)  { const i = document.getElementById('prev-avers');  i.src = c.img_avers;  i.style.display = 'block'; }
+  if (c.img_revers) { const i = document.getElementById('prev-revers'); i.src = c.img_revers; i.style.display = 'block'; }
+ 
   document.getElementById('formOverlay').classList.add('open');
 }
-
+ 
 function previewImg(input, previewId) {
   const file = input.files[0];
   if (!file) return;
@@ -774,74 +960,88 @@ function previewImg(input, previewId) {
     const img = document.getElementById(previewId);
     img.src = e.target.result;
     img.style.display = 'block';
-    img.previousElementSibling && img.previousElementSibling.classList.contains('upload-icon') &&
-      (img.previousElementSibling.style.display = 'none');
   };
   reader.readAsDataURL(file);
 }
-
-async function getImgData(inputId, previewId, existingData) {
+ 
+async function readImgAsBase64(inputId, existing) {
   const input = document.getElementById(inputId);
   if (input.files && input.files[0]) {
-    return await new Promise(res => {
+    return new Promise(res => {
       const r = new FileReader();
       r.onload = e => res(e.target.result);
       r.readAsDataURL(input.files[0]);
     });
   }
-  return existingData || '';
+  return existing || null;
 }
-
+ 
 async function saveForm() {
   const title = document.getElementById('f-title').value.trim();
-  if (!title) { alert('Le titre est obligatoire.'); return; }
-
-  const imgAvers = await getImgData('f-img-avers', 'prev-avers', editingId ? coins.find(x=>x.id===editingId)?.imgAvers : '');
-  const imgRevers = await getImgData('f-img-revers', 'prev-revers', editingId ? coins.find(x=>x.id===editingId)?.imgRevers : '');
-
-  const coin = {
-    id: editingId || crypto.randomUUID(),
+  if (!title) {
+    showToast({ type: 'error', title: 'Champ obligatoire', message: 'Le titre de la pièce est requis.' });
+    return;
+  }
+ 
+  const saveBtn = document.getElementById('saveBtn');
+  saveBtn.disabled = true;
+  saveBtn.textContent = 'Enregistrement…';
+ 
+  const existing   = editingId ? coins.find(x => x.id === editingId) : null;
+  const img_avers  = await readImgAsBase64('f-img-avers',  existing?.img_avers);
+  const img_revers = await readImgAsBase64('f-img-revers', existing?.img_revers);
+ 
+  const payload = {
     title,
-    year: document.getElementById('f-year').value,
-    facevalue: document.getElementById('f-facevalue').value,
-    quality: document.getElementById('f-quality').value,
-    condition: document.getElementById('f-condition').value,
-    metal: document.getElementById('f-metal').value,
-    fineness: document.getElementById('f-fineness').value,
-    mintage: document.getElementById('f-mintage').value,
-    weight: document.getElementById('f-weight').value,
-    diameter: document.getElementById('f-diameter').value,
-    price: document.getElementById('f-price').value,
-    buydate: document.getElementById('f-buydate').value,
-    seller: document.getElementById('f-seller').value,
-    invoice: document.getElementById('f-invoice').value,
-    note: document.getElementById('f-note').value,
-    imgAvers, imgRevers,
-    createdAt: editingId ? coins.find(x=>x.id===editingId)?.createdAt : new Date().toISOString()
+    year:      parseInt(document.getElementById('f-year').value)      || null,
+    facevalue: parseFloat(document.getElementById('f-facevalue').value) || null,
+    quality:   document.getElementById('f-quality').value   || null,
+    condition: document.getElementById('f-condition').value || null,
+    metal:     document.getElementById('f-metal').value     || null,
+    fineness:  parseInt(document.getElementById('f-fineness').value)  || null,
+    mintage:   parseInt(document.getElementById('f-mintage').value)   || null,
+    weight:    parseFloat(document.getElementById('f-weight').value)  || null,
+    diameter:  parseFloat(document.getElementById('f-diameter').value)|| null,
+    price:     parseFloat(document.getElementById('f-price').value)   || null,
+    buydate:   document.getElementById('f-buydate').value   || null,
+    seller:    document.getElementById('f-seller').value    || null,
+    invoice:   document.getElementById('f-invoice').value   || null,
+    note:      document.getElementById('f-note').value      || null,
+    img_avers,
+    img_revers
   };
-
-  if (editingId) {
-    const idx = coins.findIndex(x => x.id === editingId);
-    coins[idx] = coin;
-  } else {
-    coins.unshift(coin);
-  }
-  save();
-  closeForm();
-  renderCoins();
-}
-
-function deleteConfirm(id) {
-  if (confirm('Supprimer cette pièce de la collection ?')) {
-    coins = coins.filter(x => x.id !== id);
-    save();
-    document.getElementById('detailOverlay').classList.remove('open');
+ 
+  try {
+    if (editingId) {
+      const updated = await sbFetch(`${TABLE}?id=eq.${editingId}`, {
+        method: 'PATCH',
+        prefer: 'return=representation',
+        body: JSON.stringify(payload)
+      });
+      const idx = coins.findIndex(x => x.id === editingId);
+      if (updated && updated[0]) coins[idx] = updated[0];
+      showToast({ type: 'success', title: 'Pièce mise à jour', message: `« ${title} » a été modifiée avec succès.` });
+    } else {
+      const created = await sbFetch(TABLE, {
+        method: 'POST',
+        prefer: 'return=representation',
+        body: JSON.stringify(payload)
+      });
+      if (created && created[0]) coins.unshift(created[0]);
+      showToast({ type: 'success', title: 'Pièce ajoutée', message: `« ${title} » rejoint votre collection.` });
+    }
+    closeForm();
     renderCoins();
+  } catch (e) {
+    showToast({ type: 'error', title: 'Erreur Supabase', message: e.message });
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.textContent = editingId ? 'Mettre à jour' : 'Enregistrer la pièce';
   }
 }
-
+ 
 // ── INIT ──
-renderCoins();
+init();
 </script>
 </body>
 </html>
