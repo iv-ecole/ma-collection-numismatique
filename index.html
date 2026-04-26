@@ -327,6 +327,43 @@
     .kpi-label { font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .3rem; }
     .kpi-value { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--gold); line-height: 1; }
     .kpi-sub { font-size: .7rem; color: var(--text-muted); margin-top: .2rem; }
+    /* ══ BURGER MENU ══ */
+    .desktop-only { display: inline-flex; }
+    .btn-burger {
+      display: none;
+      flex-direction: column; justify-content: center; align-items: center;
+      gap: 4px; width: 34px; height: 34px;
+      background: transparent; border: 1px solid var(--border);
+      border-radius: var(--radius); cursor: pointer; padding: 0;
+      transition: border-color .2s;
+    }
+    .btn-burger:hover { border-color: var(--gold); }
+    .btn-burger span {
+      display: block; width: 14px; height: 1.5px;
+      background: var(--text-muted); border-radius: 2px;
+      transition: background .2s;
+    }
+    .btn-burger:hover span { background: var(--gold); }
+    .mobile-menu {
+      display: none;
+      position: fixed; top: 50px; right: 0; left: 0; z-index: 99;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      flex-direction: column;
+      box-shadow: 0 8px 24px rgba(0,0,0,.5);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu-item {
+      width: 100%; padding: 1rem 1.4rem;
+      background: transparent; border: none; border-bottom: 1px solid var(--border);
+      color: var(--text-mid); font-family: 'DM Sans', sans-serif;
+      font-size: .82rem; font-weight: 400; letter-spacing: .06em;
+      text-align: left; cursor: pointer; transition: background .15s, color .15s;
+    }
+    .mobile-menu-item:last-child { border-bottom: none; }
+    .mobile-menu-item:hover { background: var(--bg-elevated); color: var(--gold); }
+    .mobile-menu-logout { color: var(--text-muted); }
+
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
@@ -336,9 +373,10 @@
       .topbar { padding: 0 .9rem; height: 50px; }
       .topbar-logo { font-size: 1.05rem; }
       .user-chip-name { display: none; }
-      .btn-top { padding: .25rem .5rem; font-size: .62rem; letter-spacing: .04em; }
-      .topbar-right { gap: .35rem; }
+      .topbar-right { gap: .4rem; }
       .user-chip { padding: .25rem .55rem; }
+      .desktop-only { display: none !important; }
+      .btn-burger { display: flex; }
 
       /* Auth */
       .auth-box { padding: 1.8rem 1.2rem; margin: 1rem; max-width: calc(100vw - 2rem); }
@@ -431,7 +469,7 @@
     <div id="tab-login">
       <div class="auth-field">
         <label>Nom d'utilisateur</label>
-        <input type="text" id="l-user" placeholder="Votre nom d'utilisateur" autocomplete="username"
+        <input type="text" id="l-user" placeholder="votre pseudo" autocomplete="username"
           onkeydown="if(event.key==='Enter')doLogin()" />
       </div>
       <div class="auth-field">
@@ -446,7 +484,7 @@
     <div id="tab-register" style="display:none">
       <div class="auth-field">
         <label>Nom d'utilisateur</label>
-        <input type="text" id="r-user" placeholder="Choisissez un nom d'utilisateur" autocomplete="username" />
+        <input type="text" id="r-user" placeholder="choisissez un pseudo" autocomplete="username" />
       </div>
       <div class="auth-field">
         <label>Mot de passe</label>
@@ -473,17 +511,28 @@
         <span class="user-chip-name" id="tbUser">—</span>
         <span class="role-pill" id="tbRole">visiteur</span>
       </div>
-      <button class="btn-top" id="adminBtn" style="display:none" onclick="openAdmin()">⚙ Utilisateurs</button>
-      <button class="btn-top" onclick="openStats()">📊 Statistiques</button>
-      <button class="btn-top" onclick="doLogout()">Déconnexion</button>
+      <!-- Boutons desktop -->
+      <button class="btn-top desktop-only" id="adminBtn" style="display:none" onclick="openAdmin()">⚙ Utilisateurs</button>
+      <button class="btn-top desktop-only" onclick="openStats()">📊 Statistiques</button>
+      <button class="btn-top desktop-only" onclick="doLogout()">Déconnexion</button>
+      <!-- Menu burger mobile -->
+      <button class="btn-burger" id="burgerBtn" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
+  </div>
+  <!-- Menu mobile déroulant -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-item" id="mAdminBtn" style="display:none" onclick="closeMenu();openAdmin()">⚙ Utilisateurs</button>
+    <button class="mobile-menu-item" onclick="closeMenu();openStats()">📊 Statistiques</button>
+    <button class="mobile-menu-item mobile-menu-logout" onclick="closeMenu();doLogout()">Déconnexion</button>
   </div>
 
   <!-- HERO -->
   <section class="hero">
     <div>
       <h1 class="hero-title">Ma <em>Collection</em><br>Numismatique</h1>
-      <p class="hero-sub">Version 3.1</p>
+      <p class="hero-sub">Monnaie de Paris · Pièces modernes de collection</p>
     </div>
     <button class="btn btn-primary" id="addBtn" style="display:none" onclick="openForm()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -657,7 +706,7 @@
 //  CONFIG
 // ══════════════════════════════════════════════
 const SUPABASE_URL  = 'https://spollmzcbfatshuzuvfl.supabase.co';
-const SUPABASE_ANON = 'sb_publishable_smFJ3wXwsXhgQLX_Dh5Xtw_8MdG71qD';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNwb2xsbXpjYmZhdHNodXp1dmZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NTkwNTgsImV4cCI6MjA5MjAzNTA1OH0.hP7rFOn5knbTmJLFja4rFa3auwRDbcinbQQnjpkilMo';
 const TABLE         = 'coins';
 const USERS_TABLE   = 'users';
 const ADMIN_NAME    = 'ivafan';      // compte qui devient automatiquement admin
@@ -677,7 +726,11 @@ async function sb(path, opts = {}) {
       ...(opts.headers || {})
     }
   });
-  if (!res.ok) throw new Error(await res.text());
+  if (!res.ok) {
+    const txt = await res.text();
+    console.error('[Supabase]', res.status, txt);
+    throw new Error(`Supabase ${res.status}: ${txt}`);
+  }
   if (res.status === 204) return null;
   return res.json();
 }
@@ -751,7 +804,7 @@ async function doRegister() {
   try {
     // Vérifier si le username est déjà pris
     const existing = await sb(`${USERS_TABLE}?username=eq.${encodeURIComponent(username)}&select=id`);
-    if (existing?.length) { showToast({type:'error',title:'Nom déjà pris',message:'Ce nom d'utilisateur est déjà utilisé.'}); return; }
+    if (existing?.length) { showToast({type:'error',title:'Nom déjà pris',message:'Ce pseudo est déjà utilisé.'}); return; }
 
     const hashed = await hash(pass);
     const role   = username === ADMIN_NAME ? 'admin' : 'visiteur';
@@ -824,8 +877,9 @@ function showApp() {
   pill.textContent = currentUser.role;
   pill.className   = `role-pill ${currentUser.role}`;
 
-  document.getElementById('adminBtn').style.display = isAdmin() ? '' : 'none';
-  document.getElementById('addBtn').style.display   = isAdmin() ? '' : 'none';
+  document.getElementById('adminBtn').style.display  = isAdmin() ? '' : 'none';
+  document.getElementById('mAdminBtn').style.display = isAdmin() ? '' : 'none';
+  document.getElementById('addBtn').style.display    = isAdmin() ? '' : 'none';
 
   loadCoins();
 }
@@ -834,33 +888,84 @@ function showApp() {
 //  INIT
 // ══════════════════════════════════════════════
 async function init() {
-  const saved = localStorage.getItem(SESSION_KEY);
-  if (saved) {
-    try {
-      const cached = JSON.parse(saved);
-      // Rafraîchir depuis Supabase (au cas où le rôle a changé)
-      const fresh = await sb(`${USERS_TABLE}?id=eq.${cached.id}&select=*`);
-      if (fresh?.length) {
-        currentUser = fresh[0];
-        localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
-        showApp();
-      } else {
-        // Compte introuvable
-        localStorage.removeItem(SESSION_KEY);
-        document.getElementById('authScreen').classList.add('show');
-      }
-    } catch {
-      // Pas de réseau ? On utilise le cache
-      currentUser = JSON.parse(saved);
-      showApp();
+  const hideLoader = () => {
+    const lo = document.getElementById('loadingOverlay');
+    if (lo) { lo.style.opacity = '0'; setTimeout(() => lo.remove(), 400); }
+  };
+
+  // Afficher l'erreur directement sur l'écran de chargement
+  const showLoaderError = (msg) => {
+    const lo = document.getElementById('loadingOverlay');
+    if (lo) {
+      lo.innerHTML = `
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:#C9A84C;letter-spacing:.1em;margin-bottom:1rem">Numisma</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:.78rem;color:#C0392B;max-width:300px;text-align:center;line-height:1.6;padding:1rem;border:1px solid rgba(192,57,43,.3);border-radius:6px;background:rgba(192,57,43,.05)">
+          ⚠ ${msg}
+        </div>
+        <button onclick="localStorage.clear();location.reload()" style="margin-top:1.5rem;padding:.6rem 1.2rem;background:#C9A84C;color:#000;border:none;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;cursor:pointer">
+          Réessayer
+        </button>`;
     }
-  } else {
-    document.getElementById('authScreen').classList.add('show');
+  };
+
+  // Test de connectivité Supabase d'abord
+  try {
+    const testRes = await Promise.race([
+      fetch(`${SUPABASE_URL}/rest/v1/`, {
+        headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}` }
+      }),
+      new Promise((_, rej) => setTimeout(() => rej(new Error('Timeout réseau (5s)')), 5000))
+    ]);
+    if (!testRes.ok && testRes.status !== 200 && testRes.status !== 404) {
+      showLoaderError(`Erreur Supabase ${testRes.status} — Vérifiez que le RLS est désactivé sur vos tables.`);
+      return;
+    }
+  } catch(e) {
+    // Réseau indispo — essayer quand même avec le cache local
+    const saved = localStorage.getItem(SESSION_KEY);
+    if (saved) {
+      try { currentUser = JSON.parse(saved); showApp(); hideLoader(); return; } catch {}
+    }
+    showLoaderError(`Pas de connexion réseau. ${e.message}`);
+    return;
   }
 
-  const lo = document.getElementById('loadingOverlay');
-  lo.style.opacity = '0';
-  setTimeout(() => lo.remove(), 400);
+  try {
+    const saved = localStorage.getItem(SESSION_KEY);
+    if (saved) {
+      try {
+        const cached = JSON.parse(saved);
+        const fresh = await Promise.race([
+          sb(`${USERS_TABLE}?id=eq.${cached.id}&select=*`),
+          new Promise((_, rej) => setTimeout(() => rej(new Error('Timeout Supabase')), 6000))
+        ]);
+        if (fresh?.length) {
+          currentUser = fresh[0];
+          localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
+          showApp();
+        } else {
+          localStorage.removeItem(SESSION_KEY);
+          document.getElementById('authScreen').classList.add('show');
+        }
+      } catch(e) {
+        // Utiliser le cache si Supabase timeout
+        try {
+          currentUser = JSON.parse(saved);
+          showApp();
+        } catch {
+          localStorage.removeItem(SESSION_KEY);
+          document.getElementById('authScreen').classList.add('show');
+        }
+      }
+    } else {
+      document.getElementById('authScreen').classList.add('show');
+    }
+  } catch(e) {
+    showLoaderError(e.message);
+    return;
+  }
+
+  hideLoader();
 }
 
 // ══════════════════════════════════════════════
@@ -1186,6 +1291,25 @@ async function changeRole(userId, newRole) {
     await loadUsers(); // re-sync
   }
 }
+
+// ══════════════════════════════════════════════
+//  BURGER MENU
+// ══════════════════════════════════════════════
+function toggleMenu() {
+  const m = document.getElementById('mobileMenu');
+  m.classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+// Fermer le menu si on clique ailleurs
+document.addEventListener('click', e => {
+  const menu   = document.getElementById('mobileMenu');
+  const burger = document.getElementById('burgerBtn');
+  if (menu && burger && !menu.contains(e.target) && !burger.contains(e.target)) {
+    menu.classList.remove('open');
+  }
+});
 
 // ══════════════════════════════════════════════
 //  STATS AVANCÉES
