@@ -716,16 +716,17 @@ const SESSION_KEY   = 'numisma_v1'; // clé localStorage
 //  SUPABASE HELPER
 // ══════════════════════════════════════════════
 async function sb(path, opts = {}) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
-    ...opts,
-    headers: {
-      'apikey': SUPABASE_ANON,
-      'Authorization': `Bearer ${SUPABASE_ANON}`,
-      'Content-Type': 'application/json',
-      'Prefer': opts.prefer || '',
-      ...(opts.headers || {})
-    }
-  });
+  const headers = {
+    'apikey': SUPABASE_ANON,
+    'Authorization': 'Bearer ' + SUPABASE_ANON,
+    'Content-Type': 'application/json',
+  };
+  if (opts.prefer) headers['Prefer'] = opts.prefer;
+
+  const fetchOpts = { method: opts.method || 'GET', headers };
+  if (opts.body) fetchOpts.body = opts.body;
+
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, fetchOpts);
   if (!res.ok) {
     const txt = await res.text();
     console.error('[Supabase]', res.status, txt);
@@ -908,20 +909,23 @@ async function init() {
     }
   };
 
-  // Test de connectivité Supabase d'abord
+  // Test de connectivité Supabase
   try {
     const testRes = await Promise.race([
-      fetch(`${SUPABASE_URL}/rest/v1/`, {
-        headers: { 'apikey': SUPABASE_ANON, 'Authorization': `Bearer ${SUPABASE_ANON}` }
+      fetch(`${SUPABASE_URL}/rest/v1/${USERS_TABLE}?limit=1&select=id`, {
+        headers: {
+          'apikey': SUPABASE_ANON,
+          'Authorization': 'Bearer ' + SUPABASE_ANON
+        }
       }),
       new Promise((_, rej) => setTimeout(() => rej(new Error('Timeout réseau (5s)')), 5000))
     ]);
-    if (!testRes.ok && testRes.status !== 200 && testRes.status !== 404) {
-      showLoaderError(`Erreur Supabase ${testRes.status} — Vérifiez que le RLS est désactivé sur vos tables.`);
+    if (!testRes.ok) {
+      const txt = await testRes.text();
+      showLoaderError(`Erreur ${testRes.status} : ${txt}`);
       return;
     }
   } catch(e) {
-    // Réseau indispo — essayer quand même avec le cache local
     const saved = localStorage.getItem(SESSION_KEY);
     if (saved) {
       try { currentUser = JSON.parse(saved); showApp(); hideLoader(); return; } catch {}
