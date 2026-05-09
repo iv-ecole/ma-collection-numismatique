@@ -439,6 +439,37 @@
       .order-row { padding: .9rem 1rem; }
     }
 
+    /* ══ CODE COLLECTION ══ */
+    .collection-banner {
+      background: linear-gradient(90deg, rgba(201,168,76,.07), rgba(201,168,76,.03));
+      border-bottom: 1px solid var(--border);
+      padding: .6rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      font-size: .78rem;
+    }
+    .collection-banner-left { display: flex; align-items: center; gap: .8rem; color: var(--text-muted); }
+    .collection-banner-owner { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 400; }
+    .collection-code-chip {
+      display: flex; align-items: center; gap: .5rem;
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: 3px; padding: .28rem .75rem; cursor: pointer;
+      font-size: .72rem; transition: border-color .2s;
+    }
+    .collection-code-chip:hover { border-color: var(--gold); }
+    .collection-code-chip strong { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1rem; letter-spacing: .2em; }
+    .browse-mode-banner {
+      background: rgba(201,168,76,.06);
+      border-bottom: 1px solid var(--border);
+      padding: .65rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      font-size: .78rem; color: var(--text-muted);
+    }
+    .browse-mode-banner strong { color: var(--gold); }
+    @media (max-width: 640px) {
+      .collection-banner { padding: .55rem 1rem; flex-direction: column; align-items: flex-start; gap: .4rem; }
+      .browse-mode-banner { padding: .55rem 1rem; flex-direction: column; align-items: flex-start; gap: .4rem; }
+    }
+
     /* ══ BURGER MENU ══ */
     .desktop-only { display: inline-flex; }
     .btn-burger {
@@ -575,6 +606,7 @@
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchTab('login')">Connexion</button>
       <button class="auth-tab"        onclick="switchTab('register')">Créer un compte</button>
+      <button class="auth-tab"        onclick="switchTab('browse')">Voir une collection</button>
     </div>
 
     <!-- LOGIN -->
@@ -609,6 +641,21 @@
       </div>
       <button class="auth-submit" id="registerBtn" onclick="doRegister()">Créer mon compte</button>
     </div>
+
+    <!-- BROWSE -->
+    <div id="tab-browse" style="display:none">
+      <p style="font-size:.78rem;color:var(--text-muted);line-height:1.6;margin-bottom:1.2rem">
+        Entrez le code à 3 chiffres d'une collection pour la consulter en lecture seule.
+      </p>
+      <div class="auth-field">
+        <label>Code de collection</label>
+        <input type="text" id="b-code" maxlength="3" placeholder="ex. 001"
+          style="text-align:center;font-size:1.8rem;letter-spacing:.4em;font-family:'Cormorant Garamond',serif;color:var(--gold)"
+          oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+          onkeydown="if(event.key==='Enter')doBrowse()" />
+      </div>
+      <button class="auth-submit" id="browseBtn" onclick="doBrowse()">Consulter la collection</button>
+    </div>
   </div>
 </div>
 
@@ -642,11 +689,29 @@
     <button class="mobile-menu-item mobile-menu-logout" onclick="closeMenu();doLogout()">Déconnexion</button>
   </div>
 
+  <!-- BANNER : mon code de collection (mode connecté) -->
+  <div class="collection-banner" id="myCollectionBanner" style="display:none">
+    <div class="collection-banner-left">
+      🪙 Votre collection · Code de partage :
+    </div>
+    <div class="collection-code-chip" id="myCodeChip" onclick="copyCollectionCode()" title="Cliquer pour copier">
+      <span style="color:var(--text-muted);font-size:.68rem">CODE</span>
+      <strong id="myCodeDisplay">···</strong>
+      <span style="color:var(--text-muted);font-size:.68rem">— cliquer pour copier</span>
+    </div>
+  </div>
+
+  <!-- BANNER : mode navigation d'une autre collection -->
+  <div class="browse-mode-banner" id="browseBanner" style="display:none">
+    <span>👁 Vous consultez la collection de <strong id="browseOwnerName">—</strong> — lecture seule</span>
+    <button class="btn-top" onclick="exitBrowseMode()">← Quitter</button>
+  </div>
+
   <!-- HERO -->
   <section class="hero">
     <div>
       <h1 class="hero-title">Ma <em>Collection</em><br>Numismatique</h1>
-      <p class="hero-sub">Version 3.6</p>
+      <p class="hero-sub">Version 3.5</p>
     </div>
     <button class="btn btn-primary" id="addBtn" style="display:none" onclick="openForm()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -862,7 +927,8 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 const TABLE         = 'coins';
 const USERS_TABLE   = 'users';
 const ADMIN_NAME    = 'ivafan';
-const ORDERS_TABLE  = 'orders';      // compte qui devient automatiquement admin
+const ADMIN_CODE    = '001';         // code collection fixe pour l'admin
+const ORDERS_TABLE  = 'orders';
 const SESSION_KEY   = 'numisma_v1'; // clé localStorage
 
 // ══════════════════════════════════════════════
@@ -937,7 +1003,10 @@ const isAdmin   = () => currentUser?.role === 'admin';
 function switchTab(t) {
   document.getElementById('tab-login').style.display    = t==='login'    ? '' : 'none';
   document.getElementById('tab-register').style.display = t==='register' ? '' : 'none';
-  document.querySelectorAll('.auth-tab').forEach((b,i) => b.classList.toggle('active', i===(t==='login'?0:1)));
+  document.getElementById('tab-browse').style.display   = t==='browse'   ? '' : 'none';
+  document.querySelectorAll('.auth-tab').forEach((b,i) =>
+    b.classList.toggle('active', ['login','register','browse'][i] === t)
+  );
 }
 
 // ══════════════════════════════════════════════
@@ -962,7 +1031,11 @@ async function doRegister() {
 
     const hashed = await hash(pass);
     const role   = username === ADMIN_NAME ? 'admin' : 'visiteur';
-    const rows   = await sb(USERS_TABLE, { method:'POST', prefer:'return=representation', body: JSON.stringify({ username, password: hashed, role }) });
+    // Générer un code collection unique à 3 chiffres
+    const collection_code = username === ADMIN_NAME
+      ? ADMIN_CODE
+      : await generateCollectionCode();
+    const rows   = await sb(USERS_TABLE, { method:'POST', prefer:'return=representation', body: JSON.stringify({ username, password: hashed, role, collection_code }) });
 
     startSession(rows[0]);
     showToast({type:'success', title:`Bienvenue, ${rows[0].username} !`, message:`Compte créé — rôle : ${rows[0].role}.`});
@@ -1025,19 +1098,26 @@ function doLogout() {
 function showApp() {
   document.getElementById('authScreen').classList.remove('show');
   document.getElementById('app').style.display = 'block';
+  document.getElementById('browseBanner').style.display = 'none';
 
   document.getElementById('tbUser').textContent = currentUser.username;
   const pill = document.getElementById('tbRole');
   pill.textContent = currentUser.role;
   pill.className   = `role-pill ${currentUser.role}`;
 
-  document.getElementById('adminBtn').style.display  = isAdmin() ? '' : 'none';
-  document.getElementById('mAdminBtn').style.display = isAdmin() ? '' : 'none';
+  document.getElementById('adminBtn').style.display   = isAdmin() ? '' : 'none';
+  document.getElementById('mAdminBtn').style.display  = isAdmin() ? '' : 'none';
   document.getElementById('ordersBtn').style.display  = isAdmin() ? '' : 'none';
   document.getElementById('mOrdersBtn').style.display = isAdmin() ? '' : 'none';
-  document.getElementById('addBtn').style.display    = isAdmin() ? '' : 'none';
+  document.getElementById('addBtn').style.display     = '';
 
-  loadCoins();
+  // Afficher le code de collection
+  if (currentUser.collection_code) {
+    document.getElementById('myCodeDisplay').textContent = currentUser.collection_code;
+    document.getElementById('myCollectionBanner').style.display = 'flex';
+  }
+
+  loadCoins(currentUser.id);
 }
 
 // ══════════════════════════════════════════════
@@ -1130,9 +1210,10 @@ async function init() {
 // ══════════════════════════════════════════════
 //  LOAD COINS
 // ══════════════════════════════════════════════
-async function loadCoins() {
+async function loadCoins(ownerId) {
   try {
-    coins = await sb(`${TABLE}?select=*&order=created_at.desc`) || [];
+    const filter = ownerId ? `&owner_id=eq.${ownerId}` : '';
+    coins = await sb(`${TABLE}?select=*&order=created_at.desc${filter}`) || [];
   } catch(e) {
     showToast({type:'error', title:'Erreur de chargement', message: e.message});
     coins = [];
@@ -1188,7 +1269,7 @@ function renderCoins() {
   if (!list.length) {
     grid.innerHTML = `<div class="empty-state"><div class="icon">🪙</div>
       <p>${!coins.length ? 'La collection est vide.' : 'Aucune pièce ne correspond.'}</p>
-      ${isAdmin() ? `<button class="btn btn-primary" onclick="openForm()">Ajouter une pièce</button>` : ''}
+      ${currentUser ? `<button class="btn btn-primary" onclick="openForm()">Ajouter une pièce</button>` : ''}
     </div>`;
     updateStats(); return;
   }
@@ -1271,7 +1352,7 @@ function openDetail(id) {
       ${f("Prix de vente",  c.selling_price ? parseFloat(c.selling_price).toLocaleString('fr-FR',{minimumFractionDigits:2})+' €' : 'Pas en vente')}
     </div>
     ${c.note ? `<div style="padding:0 2rem 1.5rem;color:var(--text-muted);font-size:.85rem;font-style:italic;line-height:1.7">"${c.note}"</div>` : ''}
-    ${isAdmin() ? `
+    ${(isAdmin() || c.owner_id === currentUser?.id) ? `
     <div style="padding:1rem 2rem 1.8rem;display:flex;gap:.8rem;justify-content:flex-end;flex-wrap:wrap;border-top:1px solid var(--border)">
       <button class="btn btn-danger" onclick="deleteConfirm('${c.id}')">Supprimer</button>
       ${!c.sold ? `<button class="btn btn-ghost" onclick="markAsSold('${c.id}')">Marquer vendu</button>` : `<button class="btn btn-ghost" onclick="markAsAvailable('${c.id}')">Remettre en vente</button>`}
@@ -1315,7 +1396,7 @@ async function deleteConfirm(id) {
 //  FORM
 // ══════════════════════════════════════════════
 function openForm() {
-  if (!isAdmin()) return;
+  if (!currentUser) return;
   editingId = null;
   document.getElementById('formTitle').textContent = 'Ajouter une pièce';
   document.getElementById('saveBtn').textContent   = 'Enregistrer la pièce';
@@ -1367,7 +1448,7 @@ async function readImg(inputId, existing) {
 }
 
 async function saveForm() {
-  if (!isAdmin()) return;
+  if (!currentUser) return;
   const title = document.getElementById('f-title').value.trim();
   if (!title) { showToast({type:'error',title:'Champ obligatoire',message:'Le titre est requis.'}); return; }
 
@@ -1396,7 +1477,8 @@ async function saveForm() {
     invoice:   document.getElementById('f-invoice').value   || null,
     note:      document.getElementById('f-note').value      || null,
     img_avers, img_revers,
-    selling_price: parseFloat(document.getElementById('f-selling').value) || null
+    selling_price: parseFloat(document.getElementById('f-selling').value) || null,
+    owner_id: currentUser.id
   };
 
   try {
@@ -1634,7 +1716,8 @@ async function submitBuy() {
         coin_title: c.title,
         price:      c.selling_price,
         contact,
-        status:     'en attente'
+        status:     'en attente',
+        owner_id:   c.owner_id
       })
     });
 
@@ -1694,7 +1777,7 @@ async function loadOrders() {
   const el = document.getElementById('ordersList');
   el.innerHTML = '<div class="orders-empty">Chargement…</div>';
   try {
-    const orders = await sb(`${ORDERS_TABLE}?select=*&order=created_at.desc`) || [];
+    const orders = await sb(`${ORDERS_TABLE}?select=*&owner_id=eq.${currentUser.id}&order=created_at.desc`) || [];
     if (!orders.length) { el.innerHTML = '<div class="orders-empty">Aucune commande pour le moment.</div>'; return; }
 
     el.innerHTML = orders.map(o => `
@@ -1741,6 +1824,101 @@ async function markOrderSold(orderId, coinId) {
     showToast({type:'success', title:'Vendu !', message:'La pièce est marquée vendue et la commande traitée.'});
     await loadOrders();
   } catch(e) { showToast({type:'error', title:'Erreur', message: e.message}); }
+}
+
+// ══════════════════════════════════════════════
+//  GÉNÉRATION CODE COLLECTION
+// ══════════════════════════════════════════════
+async function generateCollectionCode() {
+  // Trouver tous les codes existants et prendre le suivant
+  try {
+    const users = await sb(`${USERS_TABLE}?select=collection_code&order=collection_code.asc`);
+    const codes = (users || []).map(u => parseInt(u.collection_code)).filter(n => !isNaN(n));
+    let next = 2; // admin = 001, les autres commencent à 002
+    while (codes.includes(next)) next++;
+    return String(next).padStart(3, '0');
+  } catch {
+    // Fallback aléatoire si erreur
+    return String(Math.floor(Math.random() * 897) + 102).padStart(3, '0');
+  }
+}
+
+function copyCollectionCode() {
+  const code = document.getElementById('myCodeDisplay').textContent;
+  navigator.clipboard.writeText(code).then(() =>
+    showToast({type:'success', title:'Code copié !', message:`Code "${code}" copié dans le presse-papiers.`})
+  );
+}
+
+// ══════════════════════════════════════════════
+//  BROWSE — consulter une collection par code
+// ══════════════════════════════════════════════
+let browseOwnerId = null;
+
+async function doBrowse() {
+  const code = document.getElementById('b-code').value.trim().padStart(3, '0');
+  if (code.length !== 3 || isNaN(parseInt(code))) {
+    showToast({type:'error', title:'Code invalide', message:'Entrez un code à 3 chiffres.'}); return;
+  }
+
+  const btn = document.getElementById('browseBtn');
+  btn.disabled = true; btn.textContent = 'Recherche…';
+
+  try {
+    const results = await sb(`${USERS_TABLE}?collection_code=eq.${encodeURIComponent(code)}&select=id,username,collection_code`);
+    if (!results?.length) {
+      showToast({type:'error', title:'Collection introuvable', message:`Aucune collection avec le code "${code}".`});
+      return;
+    }
+    const owner = results[0];
+    browseOwnerId = owner.id;
+
+    // Afficher l'app en mode navigation
+    document.getElementById('authScreen').classList.remove('show');
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('myCollectionBanner').style.display = 'none';
+    document.getElementById('browseBanner').style.display = 'flex';
+    document.getElementById('browseOwnerName').textContent = owner.username;
+
+    // Topbar
+    document.getElementById('tbUser').textContent = 'Visiteur';
+    const pill = document.getElementById('tbRole');
+    pill.textContent = 'visiteur'; pill.className = 'role-pill visiteur';
+    document.getElementById('adminBtn').style.display   = 'none';
+    document.getElementById('mAdminBtn').style.display  = 'none';
+    document.getElementById('ordersBtn').style.display  = 'none';
+    document.getElementById('mOrdersBtn').style.display = 'none';
+    document.getElementById('addBtn').style.display     = 'none';
+    document.getElementById('myCollectionBanner').style.display = 'none';
+
+    // Hero
+    document.querySelector('.hero-sub').textContent = `Collection de ${owner.username}`;
+
+    // Charger les pièces du propriétaire
+    await loadCoins(owner.id);
+
+  } catch(e) {
+    showToast({type:'error', title:'Erreur', message: e.message});
+  } finally {
+    btn.disabled = false; btn.textContent = 'Consulter la collection';
+  }
+}
+
+function exitBrowseMode() {
+  browseOwnerId = null;
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('browseBanner').style.display = 'none';
+  document.getElementById('b-code').value = '';
+  document.querySelector('.hero-sub').textContent = 'Version 3.6';
+  coins = [];
+
+  // Si connecté, revenir à sa propre collection
+  if (currentUser) {
+    showApp();
+  } else {
+    document.getElementById('authScreen').classList.add('show');
+    switchTab('browse');
+  }
 }
 
 // ══════════════════════════════════════════════
