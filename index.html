@@ -23,6 +23,22 @@
       --radius: 4px;
       --shadow: 0 8px 40px rgba(0,0,0,0.6);
       --red: #C0392B;
+      --coin-bg: #0A0A0A;
+    }
+    :root.light {
+      --gold: #A07828;
+      --gold-light: #C09040;
+      --gold-dim: #8A6420;
+      --bg: #F5F2EC;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #EDE9E0;
+      --border: rgba(160,120,40,0.2);
+      --text: #1A1510;
+      --text-muted: #8A8070;
+      --text-mid: #5A5040;
+      --shadow: 0 8px 40px rgba(0,0,0,0.12);
+      --red: #C0392B;
+      --coin-bg: #E8E4DC;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -33,6 +49,7 @@
       font-weight: 300;
       min-height: 100vh;
       line-height: 1.6;
+      transition: background-color .35s, color .25s;
     }
 
     /* ══ LOADING ══ */
@@ -202,9 +219,9 @@
     .card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(201,168,76,.04) 0%, transparent 60%); opacity: 0; transition: opacity .25s; }
     .card:hover { transform: translateY(-3px); border-color: var(--gold-dim); box-shadow: var(--shadow); }
     .card:hover::before { opacity: 1; }
-    .card-imgs { display: grid; grid-template-columns: 1fr 1fr; aspect-ratio: 2/1; background: #0A0A0A; gap: 1px; }
-    .coin-img { width: 100%; height: 100%; object-fit: contain; padding: .8rem; background: #0A0A0A; }
-    .coin-img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #0A0A0A; color: var(--text-muted); font-size: 1.8rem; opacity: .25; }
+    .card-imgs { display: grid; grid-template-columns: 1fr 1fr; aspect-ratio: 2/1; background: var(--coin-bg); gap: 1px; }
+    .coin-img { width: 100%; height: 100%; object-fit: contain; padding: .8rem; background: var(--coin-bg); }
+    .coin-img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--coin-bg); color: var(--text-muted); font-size: 1.8rem; opacity: .25; }
     .card-body { padding: 1.2rem 1.4rem 1.4rem; }
     .card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 400; line-height: 1.3; margin-bottom: .6rem; }
     .card-meta { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .8rem; }
@@ -236,7 +253,7 @@
     .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; line-height: 1.2; }
     .modal-close { background: none; border: 1px solid var(--border); color: var(--text-muted); width: 2rem; height: 2rem; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all .2s; flex-shrink: 0; }
     .modal-close:hover { border-color: var(--gold); color: var(--gold); }
-    .detail-imgs { display: flex; gap: 1rem; padding: 1.5rem 2rem; background: #0A0A0A; margin: 1.2rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .detail-imgs { display: flex; gap: 1rem; padding: 1.5rem 2rem; background: var(--coin-bg); margin: 1.2rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     .detail-img-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: .5rem; }
     .detail-img-wrap img { max-height: 180px; object-fit: contain; border-radius: 2px; }
     .detail-img-label { font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); }
@@ -470,6 +487,207 @@
       .browse-mode-banner { padding: .55rem 1rem; flex-direction: column; align-items: flex-start; gap: .4rem; }
     }
 
+    /* ══ THEME TOGGLE ══ */
+    .theme-toggle {
+      width: 34px; height: 34px;
+      background: transparent; border: 1px solid var(--border);
+      border-radius: var(--radius); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .theme-toggle:hover { border-color: var(--gold); }
+
+    /* ══ ANIMATIONS ══ */
+    @keyframes fadeInUp {
+      from { opacity:0; transform:translateY(14px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes fadeInScale {
+      from { opacity:0; transform:scale(.96); }
+      to   { opacity:1; transform:scale(1); }
+    }
+    @keyframes fadeIn {
+      from { opacity:0; } to { opacity:1; }
+    }
+    .hero      { animation: fadeIn .5s ease both; }
+    .stats-bar { animation: fadeIn .55s ease .08s both; }
+    .toolbar   { animation: fadeIn .55s ease .12s both; }
+    .grid-area { animation: fadeIn .6s ease .18s both; }
+    .auth-box  { animation: fadeInScale .4s cubic-bezier(.16,1,.3,1) both; }
+    .card { animation: fadeInUp .4s cubic-bezier(.16,1,.3,1) both; }
+    .card:nth-child(1)  { animation-delay:.04s }
+    .card:nth-child(2)  { animation-delay:.08s }
+    .card:nth-child(3)  { animation-delay:.12s }
+    .card:nth-child(4)  { animation-delay:.16s }
+    .card:nth-child(5)  { animation-delay:.20s }
+    .card:nth-child(6)  { animation-delay:.24s }
+    .card:nth-child(7)  { animation-delay:.28s }
+    .card:nth-child(8)  { animation-delay:.32s }
+    .card:nth-child(9)  { animation-delay:.36s }
+    .card:nth-child(10) { animation-delay:.40s }
+    .card:nth-child(n+11){ animation-delay:.44s }
+
+    /* ══ PROFIL MODAL ══ */
+    .profile-overlay { z-index: 850; }
+    .profile-modal {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+      width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;
+      transform: translateY(20px); transition: transform .3s;
+    }
+    .overlay.open .profile-modal { transform: translateY(0); }
+    .profile-header {
+      padding: 1.6rem 2rem; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; background: var(--bg-card); z-index: 1;
+    }
+    .profile-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 300; }
+    .profile-body { padding: 1.5rem 2rem 2rem; }
+    .profile-avatar-wrap {
+      display: flex; flex-direction: column; align-items: center; gap: .8rem;
+      margin-bottom: 1.6rem;
+    }
+    .profile-avatar {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--bg-elevated); border: 2px solid var(--border);
+      object-fit: cover; cursor: pointer; transition: border-color .2s;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; overflow: hidden;
+    }
+    .profile-avatar:hover { border-color: var(--gold); }
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-avatar-hint { font-size: .72rem; color: var(--text-muted); }
+    .profile-section-title {
+      font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--gold); margin: 1.4rem 0 .8rem; padding-bottom: .45rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .profile-field { display: flex; flex-direction: column; gap: .35rem; margin-bottom: .9rem; }
+    .profile-field label { font-size: .72rem; letter-spacing: .08em; color: var(--text-muted); }
+    .profile-field input { padding: .65rem .9rem; width: 100%; }
+    .profile-info-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .7rem 0; border-bottom: 1px solid rgba(201,168,76,.07); font-size: .85rem;
+    }
+    .profile-info-row:last-child { border-bottom: none; }
+    .profile-info-label { color: var(--text-muted); font-size: .75rem; }
+    .profile-info-val { color: var(--text); }
+    .profile-code-badge {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.4rem;
+      color: var(--gold); letter-spacing: .25em; cursor: pointer;
+    }
+    .profile-actions { display: flex; gap: .8rem; padding-top: 1rem; border-top: 1px solid var(--border); margin-top: 1rem; }
+
+    /* ══ VITRINE MODAL ══ */
+    .vitrine-overlay { z-index: 820; }
+    .vitrine-modal {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+      width: 100%; max-width: 900px; max-height: 90vh; overflow-y: auto;
+      transform: translateY(20px); transition: transform .3s;
+    }
+    .overlay.open .vitrine-modal { transform: translateY(0); }
+    .vitrine-header {
+      padding: 1.6rem 2rem; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; background: var(--bg-card); z-index: 1;
+    }
+    .vitrine-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 300; }
+    .vitrine-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5px; background: var(--border);
+      margin: 1.5rem 2rem; border: 1px solid var(--border);
+    }
+    .vitrine-card {
+      background: var(--bg-card); padding: 1rem;
+      display: flex; flex-direction: column; gap: .5rem; cursor: pointer;
+      transition: background .2s;
+    }
+    .vitrine-card:hover { background: var(--bg-elevated); }
+    .vitrine-card-img {
+      aspect-ratio: 1/1; background: var(--coin-bg);
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 3px; overflow: hidden; margin-bottom: .3rem;
+    }
+    .vitrine-card-img img { width: 100%; height: 100%; object-fit: contain; padding: .5rem; }
+    .vitrine-card-title { font-family: 'Cormorant Garamond', serif; font-size: .95rem; font-weight: 400; line-height: 1.3; }
+    .vitrine-card-owner { font-size: .7rem; color: var(--text-muted); }
+    .vitrine-card-price { color: var(--gold); font-size: .85rem; font-weight: 500; margin-top: auto; }
+    .vitrine-empty { padding: 3rem; text-align: center; color: var(--text-muted); font-size: .85rem; }
+    .vitrine-filters {
+      padding: 1rem 2rem; border-bottom: 1px solid var(--border);
+      display: flex; gap: .8rem; flex-wrap: wrap;
+    }
+
+    @media (max-width: 640px) {
+      .profile-modal { border-radius: 8px; max-height: 92vh; }
+      .profile-body { padding: 1.2rem 1rem 1.5rem; }
+      .vitrine-modal { border-radius: 8px; max-height: 92vh; }
+      .vitrine-grid { grid-template-columns: 1fr 1fr; margin: 1rem; }
+      .vitrine-filters { padding: .8rem 1rem; }
+    }
+
+    /* ══ ACCÈS RAPIDE (Vitrine + Voir collection) ══ */
+    .quick-access {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.5px; background: var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .quick-card {
+      background: var(--bg-card); padding: 2rem 2.5rem;
+      display: flex; align-items: center; gap: 1.4rem;
+      cursor: pointer; transition: background .2s;
+      position: relative; overflow: hidden;
+    }
+    .quick-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,.04) 0%, transparent 60%);
+      opacity: 0; transition: opacity .2s;
+    }
+    .quick-card:hover { background: var(--bg-elevated); }
+    .quick-card:hover::before { opacity: 1; }
+    .quick-card-icon {
+      font-size: 2rem; flex-shrink: 0;
+      width: 52px; height: 52px;
+      background: rgba(201,168,76,.08); border: 1px solid var(--border);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    }
+    .quick-card-text {}
+    .quick-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-weight: 400; color: var(--text); margin-bottom: .2rem;
+    }
+    .quick-card-sub { font-size: .75rem; color: var(--text-muted); line-height: 1.4; }
+
+    /* Modal code collection (accessible depuis l'app) */
+    .code-input-overlay { z-index: 850; }
+    .code-input-modal {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+      width: 100%; max-width: 360px;
+      transform: translateY(20px); transition: transform .3s;
+    }
+    .overlay.open .code-input-modal { transform: translateY(0); }
+    .code-input-header {
+      padding: 1.5rem 1.8rem 1rem; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .code-input-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 300; }
+    .code-input-body { padding: 1.4rem 1.8rem 1.8rem; }
+    .code-big-input {
+      width: 100%; text-align: center;
+      font-size: 2.2rem; letter-spacing: .5em; padding: .8rem;
+      font-family: 'Cormorant Garamond', serif; color: var(--gold);
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: var(--radius); outline: none; margin-bottom: 1.2rem;
+    }
+    .code-big-input:focus { border-color: var(--gold); }
+
+    @media (max-width: 640px) {
+      .quick-access { grid-template-columns: 1fr; }
+      .quick-card { padding: 1.3rem 1.2rem; gap: 1rem; }
+      .quick-card-icon { width: 42px; height: 42px; font-size: 1.5rem; }
+      .quick-card-title { font-size: 1rem; }
+      .code-input-modal { border-radius: 8px; }
+    }
+
     /* ══ BURGER MENU ══ */
     .desktop-only { display: inline-flex; }
     .btn-burger {
@@ -606,7 +824,6 @@
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchTab('login')">Connexion</button>
       <button class="auth-tab"        onclick="switchTab('register')">Créer un compte</button>
-      <button class="auth-tab"        onclick="switchTab('browse')">Voir une collection</button>
     </div>
 
     <!-- LOGIN -->
@@ -642,20 +859,6 @@
       <button class="auth-submit" id="registerBtn" onclick="doRegister()">Créer mon compte</button>
     </div>
 
-    <!-- BROWSE -->
-    <div id="tab-browse" style="display:none">
-      <p style="font-size:.78rem;color:var(--text-muted);line-height:1.6;margin-bottom:1.2rem">
-        Entrez le code à 3 chiffres d'une collection pour la consulter en lecture seule.
-      </p>
-      <div class="auth-field">
-        <label>Code de collection</label>
-        <input type="text" id="b-code" maxlength="3" placeholder="ex. 001"
-          style="text-align:center;font-size:1.8rem;letter-spacing:.4em;font-family:'Cormorant Garamond',serif;color:var(--gold)"
-          oninput="this.value=this.value.replace(/[^0-9]/g,'')"
-          onkeydown="if(event.key==='Enter')doBrowse()" />
-      </div>
-      <button class="auth-submit" id="browseBtn" onclick="doBrowse()">Consulter la collection</button>
-    </div>
   </div>
 </div>
 
@@ -673,8 +876,11 @@
       <!-- Boutons desktop -->
       <button class="btn-top desktop-only" id="adminBtn" style="display:none" onclick="openAdmin()">⚙ Utilisateurs</button>
       <button class="btn-top desktop-only" id="ordersBtn" style="display:none" onclick="openOrders()">📦 Commandes</button>
+      <button class="btn-top desktop-only" onclick="openVitrine()">🏪 Vitrine</button>
       <button class="btn-top desktop-only" onclick="openStats()">📊 Statistiques</button>
+      <button class="btn-top desktop-only" id="profileBtn" style="display:none" onclick="openProfile()">👤 Profil</button>
       <button class="btn-top desktop-only" onclick="doLogout()">Déconnexion</button>
+      <button class="theme-toggle desktop-only" id="themeToggle" onclick="toggleTheme()" title="Thème">🌙</button>
       <!-- Menu burger mobile -->
       <button class="btn-burger" id="burgerBtn" onclick="toggleMenu()" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -685,7 +891,10 @@
   <div class="mobile-menu" id="mobileMenu">
     <button class="mobile-menu-item" id="mAdminBtn" style="display:none" onclick="closeMenu();openAdmin()">⚙ Utilisateurs</button>
     <button class="mobile-menu-item" id="mOrdersBtn" style="display:none" onclick="closeMenu();openOrders()">📦 Commandes</button>
+    <button class="mobile-menu-item" onclick="closeMenu();openVitrine()">🏪 Vitrine</button>
     <button class="mobile-menu-item" onclick="closeMenu();openStats()">📊 Statistiques</button>
+    <button class="mobile-menu-item" id="mProfileBtn" style="display:none" onclick="closeMenu();openProfile()">👤 Profil</button>
+    <button class="mobile-menu-item" onclick="closeMenu();toggleTheme()">🌙 Changer le thème</button>
     <button class="mobile-menu-item mobile-menu-logout" onclick="closeMenu();doLogout()">Déconnexion</button>
   </div>
 
@@ -718,6 +927,24 @@
       Ajouter une pièce
     </button>
   </section>
+
+  <!-- ACCÈS RAPIDE -->
+  <div class="quick-access">
+    <div class="quick-card" onclick="openVitrine()">
+      <div class="quick-card-icon">🏪</div>
+      <div class="quick-card-text">
+        <div class="quick-card-title">Vitrine</div>
+        <div class="quick-card-sub">Toutes les pièces en vente<br>de la communauté</div>
+      </div>
+    </div>
+    <div class="quick-card" onclick="openCodeInput()">
+      <div class="quick-card-icon">🔍</div>
+      <div class="quick-card-text">
+        <div class="quick-card-title">Voir une collection</div>
+        <div class="quick-card-sub">Entrez un code à 3 chiffres<br>pour consulter une collection</div>
+      </div>
+    </div>
+  </div>
 
   <!-- STATS -->
   <section class="stats-bar">
@@ -822,11 +1049,15 @@
         <div class="form-row full"><div class="field"><label>Anecdote / description</label><textarea id="f-note" placeholder="Notes, contexte historique…"></textarea></div></div>
       </div>
       <div class="form-section">
-        <div class="form-section-title">Prix de vente</div>
-        <div class="form-row full">
+        <div class="form-section-title">Prix de vente &amp; marché</div>
+        <div class="form-row">
           <div class="field">
-            <label>Prix de vente (€) — laisser vide si pas en vente</label>
-            <input type="number" id="f-selling" placeholder="ex. 85.00 — vide = PAS EN VENTE" step="0.01" />
+            <label>Prix de vente (€) — vide = pas en vente</label>
+            <input type="number" id="f-selling" placeholder="ex. 85.00" step="0.01" />
+          </div>
+          <div class="field">
+            <label>Valeur estimée marché (€)</label>
+            <input type="number" id="f-market" placeholder="ex. 92.00" step="0.01" />
           </div>
         </div>
       </div>
@@ -905,6 +1136,28 @@
   </div>
 </div>
 
+<!-- CODE INPUT MODAL -->
+<div class="overlay code-input-overlay" id="codeInputOverlay" onclick="closeCodeInputOverlay(event)">
+  <div class="code-input-modal">
+    <div class="code-input-header">
+      <h2>Voir une collection</h2>
+      <button class="modal-close" onclick="closeCodeInput()">✕</button>
+    </div>
+    <div class="code-input-body">
+      <p style="font-size:.78rem;color:var(--text-muted);line-height:1.6;margin-bottom:1.2rem">
+        Entrez le code à 3 chiffres partagé par un collectionneur.
+      </p>
+      <input type="text" class="code-big-input" id="b-code" maxlength="3" placeholder="001"
+        oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+        onkeydown="if(event.key==='Enter')doBrowse()" />
+      <div style="display:flex;gap:.8rem">
+        <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeCodeInput()">Annuler</button>
+        <button class="btn btn-primary" style="flex:2;justify-content:center" id="browseBtn" onclick="doBrowse()">Consulter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ORDERS MODAL -->
 <div class="overlay orders-overlay" id="ordersOverlay" onclick="closeOrdersOverlay(event)">
   <div class="orders-modal">
@@ -914,6 +1167,91 @@
     </div>
     <div id="ordersList">
       <div class="orders-empty">Chargement…</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFIL MODAL -->
+<div class="overlay profile-overlay" id="profileOverlay" onclick="closeProfileOverlay(event)">
+  <div class="profile-modal">
+    <div class="profile-header">
+      <h2>Mon Profil</h2>
+      <button class="modal-close" onclick="closeProfile()">✕</button>
+    </div>
+    <div class="profile-body">
+      <!-- Avatar -->
+      <div class="profile-avatar-wrap">
+        <div class="profile-avatar" id="profileAvatarDisplay" onclick="document.getElementById('avatarInput').click()" title="Changer la photo">
+          <span id="profileAvatarEmoji">👤</span>
+        </div>
+        <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="handleAvatarChange(this)" />
+        <span class="profile-avatar-hint">Cliquer pour changer la photo</span>
+      </div>
+
+      <!-- Infos -->
+      <div class="profile-section-title">Informations</div>
+      <div class="profile-info-row">
+        <span class="profile-info-label">Nom d'utilisateur</span>
+        <span class="profile-info-val" id="profileUsername">—</span>
+      </div>
+      <div class="profile-info-row">
+        <span class="profile-info-label">Rôle</span>
+        <span class="profile-info-val" id="profileRole">—</span>
+      </div>
+      <div class="profile-info-row">
+        <span class="profile-info-label">Code de collection</span>
+        <span class="profile-code-badge" id="profileCode" onclick="copyCollectionCode()" title="Cliquer pour copier">···</span>
+      </div>
+
+      <!-- Contact -->
+      <div class="profile-section-title">Coordonnée de contact</div>
+      <div class="profile-field">
+        <label>Email ou téléphone (pour les acheteurs)</label>
+        <input type="text" id="p-contact" placeholder="ex. contact@mail.com ou 06 12 34 56 78" />
+      </div>
+      <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:.5rem" onclick="saveContact()">Enregistrer le contact</button>
+
+      <!-- Mot de passe -->
+      <div class="profile-section-title">Changer le mot de passe</div>
+      <div class="profile-field">
+        <label>Ancien mot de passe</label>
+        <input type="password" id="p-old-pass" placeholder="••••••••" />
+      </div>
+      <div class="profile-field">
+        <label>Nouveau mot de passe</label>
+        <input type="password" id="p-new-pass" placeholder="min. 6 caractères" />
+      </div>
+      <div class="profile-field">
+        <label>Confirmer le nouveau mot de passe</label>
+        <input type="password" id="p-new-pass2" placeholder="••••••••" />
+      </div>
+      <div class="profile-actions">
+        <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeProfile()">Fermer</button>
+        <button class="btn btn-primary" style="flex:2;justify-content:center" onclick="changePassword()">Changer le mot de passe</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VITRINE MODAL -->
+<div class="overlay vitrine-overlay" id="vitrineOverlay" onclick="closeVitrineOverlay(event)">
+  <div class="vitrine-modal">
+    <div class="vitrine-header">
+      <h2>🏪 Vitrine — Pièces à vendre</h2>
+      <button class="modal-close" onclick="closeVitrine()">✕</button>
+    </div>
+    <div class="vitrine-filters">
+      <input type="search" id="vitrineSearch" placeholder="Rechercher…" style="flex:1;min-width:140px;padding:.55rem .9rem" oninput="filterVitrine()" />
+      <select id="vitrineFilterMetal" onchange="filterVitrine()" style="padding:.55rem .9rem">
+        <option value="">Tous les métaux</option>
+        <option value="Argent">Argent</option>
+        <option value="Or">Or</option>
+        <option value="Métal commun">Métal commun</option>
+        <option value="Autre">Autre</option>
+      </select>
+    </div>
+    <div id="vitrineContent" style="padding:0 2rem 2rem">
+      <div class="vitrine-empty">Chargement…</div>
     </div>
   </div>
 </div>
@@ -1003,9 +1341,8 @@ const isAdmin   = () => currentUser?.role === 'admin';
 function switchTab(t) {
   document.getElementById('tab-login').style.display    = t==='login'    ? '' : 'none';
   document.getElementById('tab-register').style.display = t==='register' ? '' : 'none';
-  document.getElementById('tab-browse').style.display   = t==='browse'   ? '' : 'none';
   document.querySelectorAll('.auth-tab').forEach((b,i) =>
-    b.classList.toggle('active', ['login','register','browse'][i] === t)
+    b.classList.toggle('active', i === (t==='login' ? 0 : 1))
   );
 }
 
@@ -1107,8 +1444,12 @@ function showApp() {
 
   document.getElementById('adminBtn').style.display   = isAdmin() ? '' : 'none';
   document.getElementById('mAdminBtn').style.display  = isAdmin() ? '' : 'none';
-  document.getElementById('ordersBtn').style.display  = isAdmin() ? '' : 'none';
-  document.getElementById('mOrdersBtn').style.display = isAdmin() ? '' : 'none';
+  // Commandes visibles pour TOUS les utilisateurs connectés
+  document.getElementById('ordersBtn').style.display  = '';
+  document.getElementById('mOrdersBtn').style.display = '';
+  // Profil visible pour tous
+  document.getElementById('profileBtn').style.display  = '';
+  document.getElementById('mProfileBtn').style.display = '';
   document.getElementById('addBtn').style.display     = '';
 
   // Afficher le code de collection
@@ -1350,6 +1691,7 @@ function openDetail(id) {
       ${f("Date d'achat",   c.buydate ? new Date(c.buydate).toLocaleDateString('fr-FR') : '')}
       ${f("Lieu d'achat",   c.seller)}
       ${f("Prix de vente",  c.selling_price ? parseFloat(c.selling_price).toLocaleString('fr-FR',{minimumFractionDigits:2})+' €' : 'Pas en vente')}
+      ${f("Valeur marché",   c.market_value  ? parseFloat(c.market_value).toLocaleString('fr-FR',{minimumFractionDigits:2})+' €' : '')}
     </div>
     ${c.note ? `<div style="padding:0 2rem 1.5rem;color:var(--text-muted);font-size:.85rem;font-style:italic;line-height:1.7">"${c.note}"</div>` : ''}
     ${(isAdmin() || c.owner_id === currentUser?.id) ? `
@@ -1409,7 +1751,7 @@ function closeFormOverlay(e) { if (e.target===document.getElementById('formOverl
 function clearForm() {
   ['f-title','f-year','f-facevalue','f-quality','f-condition','f-metal',
    'f-fineness','f-mintage','f-weight','f-diameter','f-price','f-buydate',
-   'f-quantity','f-seller','f-invoice','f-note','f-selling'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+   'f-quantity','f-seller','f-invoice','f-note','f-selling','f-market'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
   document.getElementById('f-quantity').value = '1';
   ['prev-avers','prev-revers'].forEach(id => { const i=document.getElementById(id); i.src=''; i.style.display='none'; });
   document.getElementById('f-img-avers').value = '';
@@ -1426,7 +1768,7 @@ function editCoin(id) {
     'f-title':c.title,'f-year':c.year,'f-facevalue':c.facevalue,'f-quality':c.quality,
     'f-condition':c.condition,'f-metal':c.metal,'f-fineness':c.fineness,'f-mintage':c.mintage,
     'f-weight':c.weight,'f-diameter':c.diameter,'f-price':c.price,'f-buydate':c.buydate,
-    'f-quantity':c.quantity??1,'f-seller':c.seller,'f-invoice':c.invoice,'f-note':c.note,'f-selling':c.selling_price
+    'f-quantity':c.quantity??1,'f-seller':c.seller,'f-invoice':c.invoice,'f-note':c.note,'f-selling':c.selling_price,'f-market':c.market_value
   };
   Object.entries(map).forEach(([k,v]) => { const el=document.getElementById(k); if(el&&v!=null) el.value=v; });
   if (c.img_avers)  { const i=document.getElementById('prev-avers');  i.src=c.img_avers;  i.style.display='block'; }
@@ -1478,6 +1820,7 @@ async function saveForm() {
     note:      document.getElementById('f-note').value      || null,
     img_avers, img_revers,
     selling_price: parseFloat(document.getElementById('f-selling').value) || null,
+    market_value:  parseFloat(document.getElementById('f-market').value)  || null,
     owner_id: currentUser.id
   };
 
@@ -1680,6 +2023,10 @@ async function openBuy(coinId) {
   // Pré-remplir le contact si déjà sauvegardé
   const contactInput = document.getElementById('buy-contact');
   contactInput.value = currentUser?.contact || '';
+  // Si pas connecté, afficher un message
+  if (!currentUser) {
+    document.querySelector('.buy-note').textContent = 'Entrez votre coordonnée pour que le vendeur puisse vous contacter.';
+  }
 
   document.getElementById('buyOverlay').classList.add('open');
 }
@@ -1698,8 +2045,8 @@ async function submitBuy() {
   btn.disabled = true; btn.textContent = 'Envoi…';
 
   try {
-    // Sauvegarder le contact dans le profil utilisateur
-    if (currentUser.contact !== contact) {
+    // Sauvegarder le contact dans le profil utilisateur (si connecté)
+    if (currentUser && currentUser.contact !== contact) {
       await sb(`${USERS_TABLE}?id=eq.${currentUser.id}`, {method:'PATCH', body: JSON.stringify({contact})});
       currentUser.contact = contact;
       localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
@@ -1710,8 +2057,8 @@ async function submitBuy() {
       method: 'POST',
       prefer: 'return=representation',
       body: JSON.stringify({
-        user_id:    currentUser.id,
-        username:   currentUser.username,
+        user_id:    currentUser?.id || null,
+        username:   currentUser?.username || 'Visiteur anonyme',
         coin_id:    c.id,
         coin_title: c.title,
         price:      c.selling_price,
@@ -1766,7 +2113,7 @@ async function markAsAvailable(coinId) {
 //  COMMANDES (admin)
 // ══════════════════════════════════════════════
 async function openOrders() {
-  if (!isAdmin()) return;
+  if (!currentUser) return;
   document.getElementById('ordersOverlay').classList.add('open');
   await loadOrders();
 }
@@ -1777,7 +2124,7 @@ async function loadOrders() {
   const el = document.getElementById('ordersList');
   el.innerHTML = '<div class="orders-empty">Chargement…</div>';
   try {
-    const orders = await sb(`${ORDERS_TABLE}?select=*&owner_id=eq.${currentUser.id}&order=created_at.desc`) || [];
+    const orders = await sb(`${ORDERS_TABLE}?owner_id=eq.${currentUser.id}&select=*&order=created_at.desc`) || [];
     if (!orders.length) { el.innerHTML = '<div class="orders-empty">Aucune commande pour le moment.</div>'; return; }
 
     el.innerHTML = orders.map(o => `
@@ -1855,6 +2202,14 @@ function copyCollectionCode() {
 // ══════════════════════════════════════════════
 let browseOwnerId = null;
 
+function openCodeInput() {
+  document.getElementById('b-code').value = '';
+  document.getElementById('codeInputOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('b-code').focus(), 100);
+}
+function closeCodeInput() { document.getElementById('codeInputOverlay').classList.remove('open'); }
+function closeCodeInputOverlay(e) { if (e.target === document.getElementById('codeInputOverlay')) closeCodeInput(); }
+
 async function doBrowse() {
   const code = document.getElementById('b-code').value.trim().padStart(3, '0');
   if (code.length !== 3 || isNaN(parseInt(code))) {
@@ -1873,6 +2228,8 @@ async function doBrowse() {
     const owner = results[0];
     browseOwnerId = owner.id;
 
+    // Fermer le modal de code si ouvert
+    document.getElementById('codeInputOverlay').classList.remove('open');
     // Afficher l'app en mode navigation
     document.getElementById('authScreen').classList.remove('show');
     document.getElementById('app').style.display = 'block';
@@ -1917,13 +2274,201 @@ function exitBrowseMode() {
     showApp();
   } else {
     document.getElementById('authScreen').classList.add('show');
-    switchTab('browse');
+    switchTab('login');
   }
+}
+
+// ══════════════════════════════════════════════
+//  THÈME CLAIR / SOMBRE
+// ══════════════════════════════════════════════
+const THEME_KEY = 'numisma_theme';
+
+function applyTheme(theme) {
+  const root = document.documentElement;
+  const btn  = document.getElementById('themeToggle');
+  if (theme === 'light') {
+    root.classList.add('light');
+    if (btn) btn.textContent = '☀️';
+  } else {
+    root.classList.remove('light');
+    if (btn) btn.textContent = '🌙';
+  }
+}
+
+function toggleTheme() {
+  const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+}
+
+function initTheme() {
+  applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
+}
+
+// ══════════════════════════════════════════════
+//  PROFIL
+// ══════════════════════════════════════════════
+function openProfile() {
+  if (!currentUser) return;
+  // Remplir les infos
+  document.getElementById('profileUsername').textContent = currentUser.username;
+  document.getElementById('profileRole').textContent     = currentUser.role;
+  document.getElementById('profileCode').textContent     = currentUser.collection_code || '···';
+  document.getElementById('p-contact').value             = currentUser.contact || '';
+  // Avatar
+  const avatarEl = document.getElementById('profileAvatarDisplay');
+  if (currentUser.avatar) {
+    avatarEl.innerHTML = `<img src="${currentUser.avatar}" alt="Avatar" />`;
+  } else {
+    avatarEl.innerHTML = `<span id="profileAvatarEmoji">👤</span>`;
+  }
+  // Vider les champs mot de passe
+  ['p-old-pass','p-new-pass','p-new-pass2'].forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('profileOverlay').classList.add('open');
+}
+function closeProfile() { document.getElementById('profileOverlay').classList.remove('open'); }
+function closeProfileOverlay(e) { if (e.target === document.getElementById('profileOverlay')) closeProfile(); }
+
+async function handleAvatarChange(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async e => {
+    const avatarData = e.target.result;
+    try {
+      await sb(`${USERS_TABLE}?id=eq.${currentUser.id}`, {method:'PATCH', body: JSON.stringify({avatar: avatarData})});
+      currentUser.avatar = avatarData;
+      localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
+      document.getElementById('profileAvatarDisplay').innerHTML = `<img src="${avatarData}" alt="Avatar" />`;
+      showToast({type:'success', title:'Photo mise à jour', message:'Votre avatar a été enregistré.'});
+    } catch(err) {
+      showToast({type:'error', title:'Erreur', message: err.message});
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+async function saveContact() {
+  const contact = document.getElementById('p-contact').value.trim();
+  try {
+    await sb(`${USERS_TABLE}?id=eq.${currentUser.id}`, {method:'PATCH', body: JSON.stringify({contact})});
+    currentUser.contact = contact;
+    localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
+    showToast({type:'success', title:'Contact enregistré', message:'Votre coordonnée a été sauvegardée.'});
+  } catch(e) {
+    showToast({type:'error', title:'Erreur', message: e.message});
+  }
+}
+
+async function changePassword() {
+  const oldPass  = document.getElementById('p-old-pass').value;
+  const newPass  = document.getElementById('p-new-pass').value;
+  const newPass2 = document.getElementById('p-new-pass2').value;
+
+  if (!oldPass || !newPass || !newPass2) {
+    showToast({type:'error', title:'Champs requis', message:'Remplissez tous les champs.'}); return;
+  }
+  if (newPass.length < 6) {
+    showToast({type:'error', title:'Trop court', message:'Le nouveau mot de passe doit faire au moins 6 caractères.'}); return;
+  }
+  if (newPass !== newPass2) {
+    showToast({type:'error', title:'Mots de passe différents', message:'La confirmation ne correspond pas.'}); return;
+  }
+
+  try {
+    const oldHashed = await hash(oldPass);
+    // Vérifier l'ancien mot de passe
+    const check = await sb(`${USERS_TABLE}?id=eq.${currentUser.id}&password=eq.${encodeURIComponent(oldHashed)}&select=id`);
+    if (!check?.length) {
+      showToast({type:'error', title:'Mot de passe incorrect', message:'L\'ancien mot de passe est incorrect.'}); return;
+    }
+    const newHashed = await hash(newPass);
+    await sb(`${USERS_TABLE}?id=eq.${currentUser.id}`, {method:'PATCH', body: JSON.stringify({password: newHashed})});
+    showToast({type:'success', title:'Mot de passe changé', message:'Votre mot de passe a été mis à jour.'});
+    ['p-old-pass','p-new-pass','p-new-pass2'].forEach(id => { document.getElementById(id).value = ''; });
+  } catch(e) {
+    showToast({type:'error', title:'Erreur', message: e.message});
+  }
+}
+
+// ══════════════════════════════════════════════
+//  VITRINE — toutes les pièces en vente
+// ══════════════════════════════════════════════
+let vitrineCoins = [];
+
+async function openVitrine() {
+  document.getElementById('vitrineOverlay').classList.add('open');
+  document.getElementById('vitrineSearch').value = '';
+  document.getElementById('vitrineFilterMetal').value = '';
+  await loadVitrine();
+}
+function closeVitrine() { document.getElementById('vitrineOverlay').classList.remove('open'); }
+function closeVitrineOverlay(e) { if (e.target === document.getElementById('vitrineOverlay')) closeVitrine(); }
+
+async function loadVitrine() {
+  const el = document.getElementById('vitrineContent');
+  el.innerHTML = '<div class="vitrine-empty">Chargement…</div>';
+  try {
+    // Récupérer toutes les pièces en vente (selling_price non null, non vendues)
+    vitrineCoins = await sb(`${TABLE}?selling_price=not.is.null&sold=is.false&select=*&order=created_at.desc`) || [];
+    // Récupérer les noms des propriétaires
+    if (vitrineCoins.length) {
+      const ownerIds = [...new Set(vitrineCoins.map(c => c.owner_id).filter(Boolean))];
+      const owners   = await sb(`${USERS_TABLE}?id=in.(${ownerIds.join(',')})&select=id,username`) || [];
+      const ownerMap = Object.fromEntries(owners.map(o => [o.id, o.username]));
+      vitrineCoins.forEach(c => { c._ownerName = ownerMap[c.owner_id] || 'Inconnu'; });
+    }
+    renderVitrine(vitrineCoins);
+  } catch(e) {
+    el.innerHTML = `<div class="vitrine-empty" style="color:var(--red)">${e.message}</div>`;
+  }
+}
+
+function filterVitrine() {
+  const q     = document.getElementById('vitrineSearch').value.toLowerCase();
+  const metal = document.getElementById('vitrineFilterMetal').value;
+  const filtered = vitrineCoins.filter(c => {
+    if (q && !JSON.stringify(c).toLowerCase().includes(q)) return false;
+    if (metal && c.metal !== metal) return false;
+    return true;
+  });
+  renderVitrine(filtered);
+}
+
+function renderVitrine(list) {
+  const el = document.getElementById('vitrineContent');
+  if (!list.length) {
+    el.innerHTML = '<div class="vitrine-empty">Aucune pièce en vente pour le moment.</div>'; return;
+  }
+  const fmt = v => parseFloat(v).toLocaleString('fr-FR', {minimumFractionDigits:2});
+  el.innerHTML = `<div class="vitrine-grid">${list.map(c => `
+    <div class="vitrine-card" onclick="openVitrineDetail('${c.id}')">
+      <div class="vitrine-card-img">
+        ${c.img_avers
+          ? `<img src="${c.img_avers}" alt="${c.title}" />`
+          : `<span style="font-size:2rem;opacity:.2">🪙</span>`}
+      </div>
+      <div class="vitrine-card-title">${c.title}</div>
+      <div class="vitrine-card-owner">par ${c._ownerName}</div>
+      ${c.year || c.quality ? `<div style="font-size:.7rem;color:var(--text-muted)">${[c.year,c.quality,c.metal].filter(Boolean).join(' · ')}</div>` : ''}
+      <div class="vitrine-card-price">🏷 ${fmt(c.selling_price)} €</div>
+    </div>`).join('')}</div>`;
+}
+
+function openVitrineDetail(coinId) {
+  // Ouvrir la fiche détail depuis la vitrine
+  const c = vitrineCoins.find(x => x.id === coinId); if (!c) return;
+  // Injecter temporairement dans coins pour openDetail
+  const tempCoins = coins;
+  if (!coins.find(x => x.id === coinId)) coins = [...coins, c];
+  closeVitrine();
+  openDetail(coinId);
+  // Restaurer après
 }
 
 // ══════════════════════════════════════════════
 //  START
 // ══════════════════════════════════════════════
+initTheme();
 init();
 </script>
 </body>
